@@ -259,7 +259,7 @@
 			in:fade={{ duration: 520, delay: 120 }}
 			class="relative mt-9 max-w-xl text-balance text-base leading-relaxed text-gray-600 sm:mt-10 sm:text-lg md:mt-12 md:max-w-2xl md:text-2xl"
 		>
-			turn a familiar interface into a playable experiment
+			turn a familiar interface into an interactive experience
 		</p>
 		<p
 			in:fade={{ duration: 520, delay: 220 }}
@@ -285,30 +285,30 @@
 	</section>
 
 	<section
-		id="challenge"
 		use:reveal
 		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-16 sm:py-20 md:py-28"
 	>
 		<p
-			class="reveal-item lab-marker font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500"
+			id="challenge"
+			class="reveal-item lab-marker scroll-mt-24 font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
 			style="--reveal-order: 0;"
 		>
 			[ CHALLENGE ]
 		</p>
 		<h2 class="reveal-item mt-4 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-6xl" style="--reveal-order: 1;">
 			A simple rule:
-			<span class="block">interface becomes gameplay.</span>
+			<span class="block">reimagine the familiar.</span>
 		</h2>
 		<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 2;">
-			Take something people already know and reframe it as gameplay.
+			Take something people already know and transform it into something completely new.
 		</p>
 		<p class="reveal-item mt-6 text-xs font-semibold uppercase tracking-[0.16em] text-gray-500" style="--reveal-order: 3;">
 			Examples
 		</p>
 		<ul class="mt-3 space-y-3 text-base leading-relaxed text-gray-600 md:text-lg">
-			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 4;">Spotify -> rhythm puzzle game</li>
-			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 5;">Notes app -> visual novel</li>
-			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 6;">Calendar -> survival sim</li>
+			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 4;">Spotify → rhythm puzzle game</li>
+			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 5;">Notes app → visual novel</li>
+			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 6;">Calendar → survival sim</li>
 		</ul>
 		<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 7;">
 			The more unexpected the transformation, the better.
@@ -316,12 +316,12 @@
 	</section>
 
 	<section
-		id="experiment"
 		use:reveal
 		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-16 sm:py-20 md:py-28"
 	>
 		<p
-			class="reveal-item lab-marker font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500"
+			id="experiment"
+			class="reveal-item lab-marker scroll-mt-24 font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
 			style="--reveal-order: 0;"
 		>
 			[ DOCUMENT ]
@@ -361,28 +361,28 @@
 	</section>
 
 	<section
-		id="gallery"
 		use:reveal
 		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-16 sm:py-20 md:py-28"
 	>
 		<p
-			class="reveal-item lab-marker font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500"
+			id="gallery"
+			class="reveal-item lab-marker scroll-mt-24 font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
 			style="--reveal-order: 0;"
 		>
 			[ GALLERY ]
 		</p>
 		<h2 class="reveal-item mt-4 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-6xl" style="--reveal-order: 1;">
-			Look at other people's work. 
+			Take a look at others' work. 
 		</h2>
 		<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 2;">
-			Completed experiments will appear here once Catalyst launches and projects are submitted.
+			Completed experiments will appear here if Catalyst launches and projects are submitted.
 		</p>
 		<div class="reveal-item mt-8 grid grid-cols-1 gap-3 md:grid-cols-2" style="--reveal-order: 3;">
-			<div class="rounded-lg border border-gray-200 bg-white/70 p-4">
+			<div class="gallery-info-card rounded-lg border border-gray-200 p-4">
 				<p class="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-gray-500">Gallery feed</p>
 				<p class="mt-2 text-sm text-gray-600 md:text-base">Experiments will appear here after submissions open.</p>
 			</div>
-			<div class="rounded-lg border border-gray-200 bg-white/70 p-4">
+			<div class="gallery-info-card rounded-lg border border-gray-200 p-4">
 				<p class="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-gray-500">Submission status</p>
 				<p class="mt-2 text-sm text-gray-600 md:text-base">Your project can be featured after review once Catalyst launches.</p>
 			</div>
@@ -396,12 +396,12 @@
 	</section>
 
 	<section
-		id="rewards"
 		use:reveal
 		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-16 sm:py-20 md:py-28"
 	>
 		<p
-			class="reveal-item lab-marker font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500"
+			id="rewards"
+			class="reveal-item lab-marker scroll-mt-24 font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
 			style="--reveal-order: 0;"
 		>
 			[ REWARDS ]
@@ -411,7 +411,7 @@
 		</h2>
 		<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 2;">
 			Ship your experiment to receive rewards such as game grants, console grants, and
-			useful software tools ().
+			useful software tools (subject to change).
 		</p>
 		<ul class="mt-8 space-y-3 text-base leading-relaxed text-gray-600 md:text-lg">
 			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 3;">game grants</li>
@@ -421,15 +421,15 @@
 	</section>
 
 	<section
-		id="faq"
 		use:reveal
 		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-16 sm:py-20 md:py-28"
 	>
 		<p
-			class="reveal-item lab-marker font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500"
+			id="faq"
+			class="reveal-item lab-marker scroll-mt-24 font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
 			style="--reveal-order: 0;"
 		>
-			LAB NOTES
+			[ FAQ ]
 		</p>
 		<h2 class="reveal-item mt-4 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-6xl" style="--reveal-order: 1;">
 			Questions
@@ -492,7 +492,7 @@
 
 <footer class="mx-auto w-full max-w-5xl border-t border-gray-200 px-6 py-10 text-center text-sm text-gray-400">
 	<p class="mt-3">
-		Catalyst is an upcoming
+		Catalyst is possible future
 		<a
 			href="https://hackclub.com"
 			target="_blank"
@@ -595,6 +595,11 @@
 
 	:global(html) {
 		scroll-behavior: smooth;
+		--gallery-card-bg: rgba(255, 255, 255, 0.76);
+	}
+
+	.gallery-info-card {
+		background-color: var(--gallery-card-bg);
 	}
 
 	:global(a),
@@ -647,6 +652,7 @@
 	:global(html[data-theme='dark'] body) {
 		background-color: #0f172a;
 		color: #e5e7eb;
+		--gallery-card-bg: rgba(30, 41, 59, 0.72);
 	}
 
 	:global(html[data-theme='dark'] .bg-white\/90) {
@@ -684,6 +690,19 @@
 	:global(html[data-theme='dark'] .lab-entry) {
 		background-color: rgba(15, 23, 42, 0.45) !important;
 		border-color: rgba(148, 163, 184, 0.3) !important;
+	}
+
+	:global(html[data-theme='dark'] .gallery-info-card) {
+		background-color: var(--gallery-card-bg) !important;
+		border-color: rgba(148, 163, 184, 0.35) !important;
+	}
+
+	:global(html[data-theme='dark'] .gallery-info-card .text-gray-500) {
+		color: #bfdbfe !important;
+	}
+
+	:global(html[data-theme='dark'] .gallery-info-card .text-gray-600) {
+		color: #e2e8f0 !important;
 	}
 
 	:global(html[data-theme='dark'] .lab-entry:hover) {
