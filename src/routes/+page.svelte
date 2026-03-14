@@ -5,8 +5,20 @@
 	let openFaq = $state(null);
 	let isDark = $state(false);
 	let showTopFlag = $state(true);
+	let mobileMenuOpen = $state(false);
+	let manualThemeSet = false;
 	let heroSectionEl;
 	const THEME_KEY = 'catalyst-theme';
+	let themeMediaQuery;
+	let heroMouseX = $state(50);
+	let heroMouseY = $state(50);
+
+	function handleHeroMouseMove(event) {
+		const rect = heroSectionEl?.getBoundingClientRect();
+		if (!rect) return;
+		heroMouseX = ((event.clientX - rect.left) / rect.width) * 100;
+		heroMouseY = ((event.clientY - rect.top) / rect.height) * 100;
+	}
 
 	const faqs = [
 		{
@@ -38,8 +50,33 @@
 
 	function toggleTheme() {
 		const next = !isDark;
+		manualThemeSet = true;
 		applyTheme(next);
 		localStorage.setItem(THEME_KEY, next ? 'dark' : 'light');
+	}
+
+	function toggleMobileMenu() {
+		mobileMenuOpen = !mobileMenuOpen;
+	}
+
+	function closeMobileMenu() {
+		mobileMenuOpen = false;
+	}
+
+	function handleFaqKeydown(event, i, total) {
+		if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
+
+		event.preventDefault();
+		const triggers = Array.from(document.querySelectorAll('[data-faq-trigger="true"]'));
+		if (!triggers.length) return;
+
+		let nextIndex = i;
+		if (event.key === 'ArrowDown') nextIndex = (i + 1) % total;
+		if (event.key === 'ArrowUp') nextIndex = (i - 1 + total) % total;
+		if (event.key === 'Home') nextIndex = 0;
+		if (event.key === 'End') nextIndex = total - 1;
+
+		triggers[nextIndex]?.focus();
 	}
 
 	function reveal(node) {
@@ -69,8 +106,16 @@
 
 	onMount(() => {
 		const stored = localStorage.getItem(THEME_KEY);
-		const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-		applyTheme(stored ? stored === 'dark' : prefersDark);
+		themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+		manualThemeSet = stored === 'light' || stored === 'dark';
+		applyTheme(manualThemeSet ? stored === 'dark' : themeMediaQuery.matches);
+
+		const handleThemeChange = (event) => {
+			if (manualThemeSet) return;
+			applyTheme(event.matches);
+		};
+
+		themeMediaQuery.addEventListener('change', handleThemeChange);
 
 		if (!heroSectionEl || typeof IntersectionObserver === 'undefined') return;
 
@@ -88,14 +133,15 @@
 
 		return () => {
 			heroObserver.disconnect();
+			themeMediaQuery?.removeEventListener('change', handleThemeChange);
 		};
 	});
 </script>
 
 <nav class="fixed inset-x-0 top-0 z-50 border-b border-gray-100 bg-white/90 backdrop-blur-sm">
-	<div class="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-4">
+	<div class="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
 		<span class="font-heading text-lg font-bold tracking-tight text-gray-900">Catalyst</span>
-		<div class="flex items-center gap-7 md:gap-9">
+		<div class="hidden items-center gap-7 md:flex md:gap-9">
 			<ul class="hidden items-center gap-8 md:flex">
 				{#each [['#challenge', 'Challenge'], ['#experiment', 'Experiment'], ['#gallery', 'Gallery'], ['#rewards', 'Rewards'], ['#faq', 'FAQ']] as [href, label]}
 					<li>
@@ -123,6 +169,57 @@
 				{isDark ? 'Light' : 'Dark'}
 			</button>
 		</div>
+		<div class="flex items-center gap-3 md:hidden">
+			<button
+				type="button"
+				onclick={toggleTheme}
+				aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+				class={`inline-flex h-10 w-[5.35rem] items-center justify-center rounded-full border px-3 text-xs font-semibold uppercase tracking-wider transition-all duration-200 ${
+					isDark
+						? 'border-dodger/40 bg-dodger/15 text-dodger'
+						: 'border-gray-200 bg-white text-gray-600 hover:border-dodger/40 hover:text-dodger'
+				}`}
+			>
+				{isDark ? 'Light' : 'Dark'}
+			</button>
+			<button
+				type="button"
+				onclick={toggleMobileMenu}
+				aria-expanded={mobileMenuOpen}
+				aria-controls="mobile-nav-menu"
+				aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+				class="inline-flex h-10 w-10 items-center justify-center rounded-md border border-gray-200 text-gray-600 transition-colors duration-200 hover:border-dodger/40 hover:text-dodger"
+			>
+				<svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+					{#if mobileMenuOpen}
+						<path d="M4 4L12 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+						<path d="M12 4L4 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+					{:else}
+						<path d="M2.5 4H13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+						<path d="M2.5 8H13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+						<path d="M2.5 12H13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+					{/if}
+				</svg>
+			</button>
+		</div>
+	</div>
+	<div
+		id="mobile-nav-menu"
+		class={`overflow-hidden border-t border-gray-200 bg-white transition-all duration-300 md:hidden ${mobileMenuOpen ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'}`}
+	>
+		<ul class="space-y-1 px-4 py-3 sm:px-6">
+			{#each [['#challenge', 'Challenge'], ['#experiment', 'Experiment'], ['#gallery', 'Gallery'], ['#rewards', 'Rewards'], ['#faq', 'FAQ']] as [href, label]}
+				<li>
+					<a
+						{href}
+						onclick={closeMobileMenu}
+						class="block rounded-md px-3 py-2.5 text-sm font-medium text-gray-600 transition-colors duration-200 hover:bg-dodger/10 hover:text-dodger"
+					>
+						{label}
+					</a>
+				</li>
+			{/each}
+		</ul>
 	</div>
 </nav>
 
@@ -145,11 +242,14 @@
 <main class="lab-grid overflow-x-hidden px-6 pt-24 pb-24 md:pt-28 md:pb-32">
 	<section
 		bind:this={heroSectionEl}
-		class="hero-grid relative mx-auto flex min-h-[84vh] w-full max-w-5xl flex-col items-center justify-center pb-24 text-center md:min-h-[88vh] md:pb-28"
+		role="banner"
+		onmousemove={handleHeroMouseMove}
+		class="hero-grid relative mx-auto flex min-h-[calc(100svh-4.5rem)] w-full max-w-5xl flex-col items-center justify-center pb-16 text-center sm:pb-20 md:pb-28"
+		style="--grid-ox: {((heroMouseX - 50) * 0.1).toFixed(2)}px; --grid-oy: {((heroMouseY - 50) * 0.1).toFixed(2)}px; --mx: {heroMouseX.toFixed(1)}%; --my: {heroMouseY.toFixed(1)}%;"
 	>
 		<h1
 			in:fade={{ duration: 520 }}
-			class="whitespace-nowrap font-heading text-[clamp(3.2rem,15vw,18rem)] font-black uppercase leading-[0.86] tracking-[-0.04em] text-gray-900"
+			class="relative font-heading text-[clamp(2.4rem,10vw,9rem)] font-black uppercase leading-[0.86] tracking-[-0.04em] text-gray-900"
 		>
 			{#each 'CATALYST'.split('') as char}
 				<span class="inline-block transition-transform duration-200 ease-out hover:-translate-y-1">{char}</span>
@@ -157,18 +257,27 @@
 		</h1>
 		<p
 			in:fade={{ duration: 520, delay: 120 }}
-			class="mt-12 max-w-2xl text-balance text-lg leading-relaxed text-gray-600 md:text-2xl"
+			class="relative mt-9 max-w-xl text-balance text-base leading-relaxed text-gray-600 sm:mt-10 sm:text-lg md:mt-12 md:max-w-2xl md:text-2xl"
 		>
 			turn a familiar interface into a playable experiment
 		</p>
 		<p
 			in:fade={{ duration: 520, delay: 220 }}
-			class="mt-14 text-xs font-semibold uppercase tracking-[0.26em] text-dodger [animation:pulse_3.4s_ease-in-out_infinite]"
+			class="relative mt-10 inline-flex items-center gap-2 rounded-full border border-dodger/20 bg-dodger/10 px-5 py-2 font-mono text-sm font-semibold uppercase tracking-[0.16em] text-dodger sm:mt-12 md:mt-14"
 		>
+			<span class="inline-block h-2 w-2 rounded-full bg-dodger [animation:pulse_2.8s_ease-in-out_infinite]"></span>
 			Coming Soon
 		</p>
+		<a
+			in:fade={{ duration: 520, delay: 340 }}
+			href="#"
+			aria-label="RSVP for Catalyst"
+			class="relative mt-5 inline-flex items-center rounded-full bg-dodger px-9 py-3.5 text-base font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-dodger/90 hover:shadow-md active:translate-y-0"
+		>
+			RSVP
+		</a>
 		<div
-			in:fade={{ duration: 520, delay: 300 }}
+			in:fade={{ duration: 520, delay: 440 }}
 			class="absolute bottom-12 left-1/2 -translate-x-1/2 text-xs uppercase tracking-[0.18em] text-gray-400 md:bottom-16"
 		>
 			<div class="[animation:bounce_2s_ease-in-out_infinite]">scroll ↓</div>
@@ -178,15 +287,15 @@
 	<section
 		id="challenge"
 		use:reveal
-		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-24 md:py-28"
+		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-16 sm:py-20 md:py-28"
 	>
 		<p
 			class="reveal-item lab-marker font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500"
 			style="--reveal-order: 0;"
 		>
-			EXPERIMENT 01
+			[ CHALLENGE ]
 		</p>
-		<h2 class="reveal-item mt-4 font-heading text-4xl font-bold leading-tight text-gray-900 md:text-6xl" style="--reveal-order: 1;">
+		<h2 class="reveal-item mt-4 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-6xl" style="--reveal-order: 1;">
 			A simple rule:
 			<span class="block">interface becomes gameplay.</span>
 		</h2>
@@ -194,7 +303,7 @@
 			Take something people already know and reframe it as gameplay.
 		</p>
 		<p class="reveal-item mt-6 text-xs font-semibold uppercase tracking-[0.16em] text-gray-500" style="--reveal-order: 3;">
-			Example transformations
+			Examples
 		</p>
 		<ul class="mt-3 space-y-3 text-base leading-relaxed text-gray-600 md:text-lg">
 			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 4;">Spotify -> rhythm puzzle game</li>
@@ -209,19 +318,19 @@
 	<section
 		id="experiment"
 		use:reveal
-		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-24 md:py-28"
+		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-16 sm:py-20 md:py-28"
 	>
 		<p
 			class="reveal-item lab-marker font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500"
 			style="--reveal-order: 0;"
 		>
-			LAB NOTE
+			[ DOCUMENT ]
 		</p>
-		<h2 class="reveal-item mt-4 font-heading text-4xl font-bold leading-tight text-gray-900 md:text-6xl" style="--reveal-order: 1;">
-			Experiment
+		<h2 class="reveal-item mt-4 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-6xl" style="--reveal-order: 1;">
+			Document your process.
 		</h2>
 		<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 2;">
-			Catalyst treats each project like an experiment report. Describe the interface you studied, the
+			Treat each project like an experiment report. Describe the interface you studied, the
 			hypothesis you explored, and what happened after testing your mechanics.
 		</p>
 		<div
@@ -254,45 +363,55 @@
 	<section
 		id="gallery"
 		use:reveal
-		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-24 md:py-28"
+		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-16 sm:py-20 md:py-28"
 	>
 		<p
 			class="reveal-item lab-marker font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500"
 			style="--reveal-order: 0;"
 		>
-			RESULTS
+			[ GALLERY ]
 		</p>
-		<h2 class="reveal-item mt-4 font-heading text-4xl font-bold leading-tight text-gray-900 md:text-6xl" style="--reveal-order: 1;">
-			Gallery
+		<h2 class="reveal-item mt-4 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-6xl" style="--reveal-order: 1;">
+			Look at other people's work. 
 		</h2>
 		<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 2;">
 			Completed experiments will appear here once Catalyst launches and projects are submitted.
 		</p>
-		<div class="reveal-item mt-8" style="--reveal-order: 3;">
+		<div class="reveal-item mt-8 grid grid-cols-1 gap-3 md:grid-cols-2" style="--reveal-order: 3;">
+			<div class="rounded-lg border border-gray-200 bg-white/70 p-4">
+				<p class="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-gray-500">Gallery feed</p>
+				<p class="mt-2 text-sm text-gray-600 md:text-base">Experiments will appear here after submissions open.</p>
+			</div>
+			<div class="rounded-lg border border-gray-200 bg-white/70 p-4">
+				<p class="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-gray-500">Submission status</p>
+				<p class="mt-2 text-sm text-gray-600 md:text-base">Your project can be featured after review once Catalyst launches.</p>
+			</div>
+			<div class="md:col-span-2">
 			<p class="inline-flex items-center gap-2 rounded-full border border-dodger/20 bg-dodger/10 px-3 py-1 font-mono text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-dodger">
 				<span class="inline-block h-1.5 w-1.5 rounded-full bg-dodger [animation:pulse_2.8s_ease-in-out_infinite]"></span>
 				Gallery coming soon
 			</p>
+			</div>
 		</div>
 	</section>
 
 	<section
 		id="rewards"
 		use:reveal
-		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-24 md:py-28"
+		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-16 sm:py-20 md:py-28"
 	>
 		<p
 			class="reveal-item lab-marker font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500"
 			style="--reveal-order: 0;"
 		>
-			REWARDS
+			[ REWARDS ]
 		</p>
-		<h2 class="reveal-item mt-4 font-heading text-4xl font-bold leading-tight text-gray-900 md:text-6xl" style="--reveal-order: 1;">
-			Rewards
+		<h2 class="reveal-item mt-4 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-6xl" style="--reveal-order: 1;">
+			Win epic prizes!
 		</h2>
 		<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 2;">
-			If you ship your experiment, you may receive rewards such as game grants, console grants, and
-			useful software tools.
+			Ship your experiment to receive rewards such as game grants, console grants, and
+			useful software tools ().
 		</p>
 		<ul class="mt-8 space-y-3 text-base leading-relaxed text-gray-600 md:text-lg">
 			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 3;">game grants</li>
@@ -304,15 +423,15 @@
 	<section
 		id="faq"
 		use:reveal
-		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-24 md:py-28"
+		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-16 sm:py-20 md:py-28"
 	>
 		<p
 			class="reveal-item lab-marker font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500"
 			style="--reveal-order: 0;"
 		>
-			NOTES
+			LAB NOTES
 		</p>
-		<h2 class="reveal-item mt-4 font-heading text-4xl font-bold leading-tight text-gray-900 md:text-6xl" style="--reveal-order: 1;">
+		<h2 class="reveal-item mt-4 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-6xl" style="--reveal-order: 1;">
 			Questions
 		</h2>
 		<div class="reveal-item mt-10 border-t border-gray-200" style="--reveal-order: 2;">
@@ -320,6 +439,10 @@
 				<div class="border-b border-gray-200">
 					<button
 						onclick={() => toggleFaq(i)}
+						onkeydown={(event) => handleFaqKeydown(event, i, faqs.length)}
+						data-faq-trigger="true"
+						id={`faq-${i}-button`}
+						aria-controls={`faq-${i}-panel`}
 						class="faq-item group flex w-full items-center justify-between gap-6 rounded-md px-4 -mx-4 py-6 text-left transition-colors duration-200 hover:bg-dodger/10 active:scale-[0.992]"
 						aria-expanded={openFaq === i}
 					>
@@ -350,6 +473,9 @@
 					</button>
 					{#if openFaq === i}
 						<div
+							id={`faq-${i}-panel`}
+							role="region"
+							aria-labelledby={`faq-${i}-button`}
 							transition:slide={{ duration: 280 }}
 							class="px-4 pt-3 pb-8 text-base leading-relaxed text-gray-600"
 						>
@@ -390,6 +516,10 @@
 </footer>
 
 <style>
+	:global(*) {
+		box-sizing: border-box;
+	}
+
 	.reveal-section {
 		opacity: 0;
 		transform: translateY(14px);
@@ -433,15 +563,29 @@
 	.hero-grid::before {
 		content: '';
 		position: absolute;
-		inset: 6% 2% 10% 2%;
+		inset: 0;
 		pointer-events: none;
-		border-radius: 24px;
 		background-image:
-			linear-gradient(to right, rgba(30, 144, 255, 0.055) 1px, transparent 1px),
-			linear-gradient(to bottom, rgba(30, 144, 255, 0.055) 1px, transparent 1px);
-		background-size: 40px 40px;
-		opacity: 0.26;
-		mask-image: radial-gradient(circle at 50% 45%, #000 45%, transparent 92%);
+			linear-gradient(to right, rgba(30, 144, 255, 0.04) 1px, transparent 1px),
+			linear-gradient(to bottom, rgba(30, 144, 255, 0.04) 1px, transparent 1px);
+		background-size: 60px 60px;
+		background-position: calc(50% + var(--grid-ox, 0px)) calc(50% + var(--grid-oy, 0px));
+		mask-image: radial-gradient(ellipse 80% 68% at 50% 42%, black 10%, transparent 68%);
+		transition: background-position 600ms ease-out;
+	}
+
+	.hero-grid::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		background-image:
+			linear-gradient(to right, rgba(30, 144, 255, 0.09) 1px, transparent 1px),
+			linear-gradient(to bottom, rgba(30, 144, 255, 0.09) 1px, transparent 1px);
+		background-size: 60px 60px;
+		background-position: calc(50% + var(--grid-ox, 0px)) calc(50% + var(--grid-oy, 0px));
+		mask-image: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), black 0%, transparent 100%);
+		transition: background-position 600ms ease-out;
 	}
 
 	:global(.reveal-section.is-visible) {
@@ -451,6 +595,17 @@
 
 	:global(html) {
 		scroll-behavior: smooth;
+	}
+
+	:global(a),
+	:global(button) {
+		outline: none;
+	}
+
+	:global(a:focus-visible),
+	:global(button:focus-visible) {
+		box-shadow: 0 0 0 2px rgba(30, 144, 255, 0.22), 0 0 0 4px rgba(30, 144, 255, 0.4);
+		border-radius: 0.45rem;
 	}
 
 	:global(.is-visible .reveal-item) {
@@ -507,7 +662,7 @@
 	}
 
 	:global(html[data-theme='dark'] .text-gray-600) {
-		color: #cbd5e1 !important;
+		color: #d1d9e6 !important;
 	}
 
 	:global(html[data-theme='dark'] .text-gray-500),
@@ -552,13 +707,26 @@
 		color: #dbeafe !important;
 	}
 
+	:global(html[data-theme='dark'] #mobile-nav-menu) {
+		background-color: rgba(15, 23, 42, 0.98) !important;
+		border-color: rgba(148, 163, 184, 0.25) !important;
+	}
+
+	:global(html[data-theme='dark'] #mobile-nav-menu .text-gray-600) {
+		color: #dbeafe !important;
+	}
+
+	:global(html[data-theme='dark'] #mobile-nav-menu .border-gray-200) {
+		border-color: rgba(148, 163, 184, 0.3) !important;
+	}
+
 	:global(html[data-theme='dark'] .faq-item:hover) {
 		background-color: rgba(30, 144, 255, 0.08) !important;
 	}
 
 	@media (max-width: 640px) {
 		.hero-grid::before {
-			inset: 8% 0% 14% 0%;
+			opacity: 0.6;
 		}
 	}
 </style>
