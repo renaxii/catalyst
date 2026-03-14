@@ -97,7 +97,7 @@
 		<span class="font-heading text-lg font-bold tracking-tight text-gray-900">Catalyst</span>
 		<div class="flex items-center gap-7 md:gap-9">
 			<ul class="hidden items-center gap-8 md:flex">
-				{#each [['#challenge', 'Challenge'], ['#experiment-log', 'Experiment Log'], ['#gallery', 'Gallery'], ['#prizes', 'Prizes'], ['#faq', 'FAQ']] as [href, label]}
+				{#each [['#challenge', 'Challenge'], ['#experiment', 'Experiment'], ['#gallery', 'Gallery'], ['#rewards', 'Rewards'], ['#faq', 'FAQ']] as [href, label]}
 					<li>
 						<a
 							{href}
@@ -142,10 +142,10 @@
 	/>
 </a>
 
-<main class="overflow-x-hidden px-6 pt-24 pb-24 md:pt-28 md:pb-32">
+<main class="lab-grid overflow-x-hidden px-6 pt-24 pb-24 md:pt-28 md:pb-32">
 	<section
 		bind:this={heroSectionEl}
-		class="relative mx-auto flex min-h-[84vh] w-full max-w-5xl flex-col items-center justify-center pb-24 text-center md:min-h-[88vh] md:pb-28"
+		class="hero-grid relative mx-auto flex min-h-[84vh] w-full max-w-5xl flex-col items-center justify-center pb-24 text-center md:min-h-[88vh] md:pb-28"
 	>
 		<h1
 			in:fade={{ duration: 520 }}
@@ -178,68 +178,74 @@
 	<section
 		id="challenge"
 		use:reveal
-		class="reveal-section mx-auto w-full max-w-4xl border-t border-gray-200 py-24 md:py-28"
+		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-24 md:py-28"
 	>
-		<p class="reveal-item text-xs font-semibold uppercase tracking-[0.22em] text-dodger" style="--reveal-order: 0;">
-			01 - Challenge
+		<p
+			class="reveal-item lab-marker font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500"
+			style="--reveal-order: 0;"
+		>
+			EXPERIMENT 01
 		</p>
 		<h2 class="reveal-item mt-4 font-heading text-4xl font-bold leading-tight text-gray-900 md:text-6xl" style="--reveal-order: 1;">
 			A simple rule:
 			<span class="block">interface becomes gameplay.</span>
 		</h2>
 		<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 2;">
-			Take something people already know - an app, a tool, a system - and transform it into a playable game or interactive experience.
+			Take something people already know and reframe it as gameplay.
 		</p>
-		<ul class="mt-8 space-y-4 text-base leading-relaxed text-gray-600 md:text-lg">
-			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 3;">Turn <span class="font-semibold text-gray-900">Spotify</span> into a puzzle game.</li>
-            <li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 6;">Make <span class="font-semibold text-gray-900">Notes</span> into a visual novel.</li>
+		<p class="reveal-item mt-6 text-xs font-semibold uppercase tracking-[0.16em] text-gray-500" style="--reveal-order: 3;">
+			Example transformations
+		</p>
+		<ul class="mt-3 space-y-3 text-base leading-relaxed text-gray-600 md:text-lg">
+			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 4;">Spotify -> rhythm puzzle game</li>
+			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 5;">Notes app -> visual novel</li>
+			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 6;">Calendar -> survival sim</li>
 		</ul>
-        <p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 5;">
-        Think of it like running an experiment:<br><br>
-        - Subject: the original system<br>
-        - Hypothesis: what game could it become?<br>
-        - Experiment: build it<br>
-        - Result: a playable experience<br><br>
-        The more unexpected the transformation, the better.
-        </p>
+		<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 7;">
+			The more unexpected the transformation, the better.
+		</p>
 	</section>
 
 	<section
-		id="experiment-log"
+		id="experiment"
 		use:reveal
-		class="reveal-section mx-auto w-full max-w-4xl border-t border-gray-200 py-24 md:py-28"
+		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-24 md:py-28"
 	>
-		<p class="reveal-item text-xs font-semibold uppercase tracking-[0.22em] text-dodger" style="--reveal-order: 0;">
-			02 - Experiment Log
+		<p
+			class="reveal-item lab-marker font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500"
+			style="--reveal-order: 0;"
+		>
+			LAB NOTE
 		</p>
 		<h2 class="reveal-item mt-4 font-heading text-4xl font-bold leading-tight text-gray-900 md:text-6xl" style="--reveal-order: 1;">
-			Document what you test.
+			Experiment
 		</h2>
 		<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 2;">
 			Catalyst treats each project like an experiment report. Describe the interface you studied, the
 			hypothesis you explored, and what happened after testing your mechanics.
 		</p>
 		<div
-			class="reveal-item lab-note mt-8 rounded-xl border border-gray-200 bg-[#F8FBFF] px-5 py-5 text-[0.95rem] leading-relaxed md:px-6 md:py-6"
+			class="reveal-item lab-note lab-entry mt-8 rounded-xl border border-gray-200 bg-[#F8FBFF] px-5 py-5 text-[0.95rem] leading-relaxed md:px-6 md:py-6"
 			style="--reveal-order: 3;"
 		>
-			<p class="font-mono text-sm font-semibold tracking-wide text-gray-900">Experiment Log</p>
-			<dl class="mt-4 space-y-2.5 font-mono text-sm md:text-[0.92rem]">
-				<div class="grid grid-cols-[8.5rem_1fr] gap-x-4">
-					<dt class="font-semibold text-gray-900">Subject:</dt>
-					<dd class="text-gray-600">Spotify</dd>
+			<p class="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">Experiment #001</p>
+			<dl class="mt-5 font-mono text-sm md:text-[0.92rem]">
+				<div class="py-3 first:pt-0">
+					<dt class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-gray-500">Subject</dt>
+					<dd class="mt-1 text-gray-600">Spotify</dd>
 				</div>
-				<div class="grid grid-cols-[8.5rem_1fr] gap-x-4">
-					<dt class="font-semibold text-gray-900">Hypothesis:</dt>
-					<dd class="text-gray-600">what if music discovery worked like a puzzle?</dd>
+				<div class="field-divider py-3">
+					<dt class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-gray-500">Hypothesis</dt>
+					<dd class="mt-1 text-gray-600">What if music discovery worked like a puzzle?</dd>
 				</div>
-				<div class="grid grid-cols-[8.5rem_1fr] gap-x-4">
-					<dt class="font-semibold text-gray-900">Experiments:</dt>
-					<dd class="text-gray-600">rhythm mechanics, playlist challenges</dd>
+				<div class="field-divider py-3">
+					<dt class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-gray-500">Experiments</dt>
+					<dd class="mt-1 text-gray-600">Rhythm mechanics</dd>
+					<dd class="text-gray-600">Playlist challenges</dd>
 				</div>
-				<div class="grid grid-cols-[8.5rem_1fr] gap-x-4">
-					<dt class="font-semibold text-gray-900">Result:</dt>
-					<dd class="text-gray-600">playable puzzle prototype</dd>
+				<div class="field-divider py-3 pb-0">
+					<dt class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-gray-500">Result</dt>
+					<dd class="mt-1 text-gray-600">Playable rhythm puzzle prototype</dd>
 				</div>
 			</dl>
 		</div>
@@ -248,36 +254,41 @@
 	<section
 		id="gallery"
 		use:reveal
-		class="reveal-section mx-auto w-full max-w-4xl border-t border-gray-200 py-24 md:py-28"
+		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-24 md:py-28"
 	>
-		<p class="reveal-item text-xs font-semibold uppercase tracking-[0.22em] text-dodger" style="--reveal-order: 0;">
-			03 - Gallery
+		<p
+			class="reveal-item lab-marker font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500"
+			style="--reveal-order: 0;"
+		>
+			RESULTS
 		</p>
 		<h2 class="reveal-item mt-4 font-heading text-4xl font-bold leading-tight text-gray-900 md:text-6xl" style="--reveal-order: 1;">
-			Published Experiments
+			Gallery
 		</h2>
 		<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 2;">
-			Completed experiments will be featured in the gallery.
+			Completed experiments will appear here once Catalyst launches and projects are submitted.
 		</p>
-		<div class="mt-8 space-y-2 text-base leading-relaxed md:text-lg">
-			<p class="reveal-item rounded-md px-3 -mx-3 font-semibold text-gray-900 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 3;">Experiment #01</p>
-			<p class="reveal-item rounded-md px-3 -mx-3 text-gray-600 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 4;"><span class="font-semibold text-gray-900">Subject:</span> Spotify</p>
-			<p class="reveal-item rounded-md px-3 -mx-3 text-gray-600 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 5;">
-				<span class="font-semibold text-gray-900">Transformation:</span> rhythm puzzle game
+		<div class="reveal-item mt-8" style="--reveal-order: 3;">
+			<p class="inline-flex items-center gap-2 rounded-full border border-dodger/20 bg-dodger/10 px-3 py-1 font-mono text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-dodger">
+				<span class="inline-block h-1.5 w-1.5 rounded-full bg-dodger [animation:pulse_2.8s_ease-in-out_infinite]"></span>
+				Gallery coming soon
 			</p>
 		</div>
 	</section>
 
 	<section
-		id="prizes"
+		id="rewards"
 		use:reveal
-		class="reveal-section mx-auto w-full max-w-4xl border-t border-gray-200 py-24 md:py-28"
+		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-24 md:py-28"
 	>
-		<p class="reveal-item text-xs font-semibold uppercase tracking-[0.22em] text-dodger" style="--reveal-order: 0;">
-			04 - Prizes
+		<p
+			class="reveal-item lab-marker font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500"
+			style="--reveal-order: 0;"
+		>
+			REWARDS
 		</p>
 		<h2 class="reveal-item mt-4 font-heading text-4xl font-bold leading-tight text-gray-900 md:text-6xl" style="--reveal-order: 1;">
-			Prizes
+			Rewards
 		</h2>
 		<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 2;">
 			If you ship your experiment, you may receive rewards such as game grants, console grants, and
@@ -293,10 +304,13 @@
 	<section
 		id="faq"
 		use:reveal
-		class="reveal-section mx-auto w-full max-w-4xl border-t border-gray-200 py-24 md:py-28"
+		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-24 md:py-28"
 	>
-		<p class="reveal-item text-xs font-semibold uppercase tracking-[0.22em] text-dodger" style="--reveal-order: 0;">
-			05 — FAQ
+		<p
+			class="reveal-item lab-marker font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500"
+			style="--reveal-order: 0;"
+		>
+			NOTES
 		</p>
 		<h2 class="reveal-item mt-4 font-heading text-4xl font-bold leading-tight text-gray-900 md:text-6xl" style="--reveal-order: 1;">
 			Questions
@@ -357,7 +371,7 @@
 			href="https://hackclub.com"
 			target="_blank"
 			rel="noreferrer"
-			class="font-semibold text-dodger transition-opacity duration-200 hover:opacity-75"
+			class="link-lift inline-block font-semibold text-dodger"
 		>
 			Hack Club
 		</a>
@@ -368,7 +382,7 @@
 			href="https://github.com/renaxii/catalyst"
 			target="_blank"
 			rel="noreferrer"
-			class="inline-block transition-all duration-200 hover:-translate-y-0.5 hover:text-dodger"
+			class="link-lift inline-block"
 		>
 			source code on GitHub
 		</a>
@@ -389,9 +403,54 @@
 		transition-delay: calc(var(--reveal-order, 0) * 70ms);
 	}
 
+	.lab-marker {
+		font-family: 'DM Sans', 'Inter', sans-serif;
+	}
+
+	.lab-entry {
+		transition: transform 260ms ease, border-color 260ms ease, box-shadow 260ms ease;
+	}
+
+	.lab-entry:hover {
+		transform: translateY(-2px);
+		border-color: rgba(30, 144, 255, 0.35);
+		box-shadow: 0 10px 24px -18px rgba(30, 144, 255, 0.55);
+	}
+
+	.field-divider {
+		border-top: 1px solid rgba(148, 163, 184, 0.22);
+	}
+
+	.link-lift {
+		transition: transform 240ms ease, color 240ms ease, opacity 240ms ease;
+	}
+
+	.link-lift:hover {
+		transform: translateY(-2px);
+		color: #1e90ff;
+	}
+
+	.hero-grid::before {
+		content: '';
+		position: absolute;
+		inset: 6% 2% 10% 2%;
+		pointer-events: none;
+		border-radius: 24px;
+		background-image:
+			linear-gradient(to right, rgba(30, 144, 255, 0.055) 1px, transparent 1px),
+			linear-gradient(to bottom, rgba(30, 144, 255, 0.055) 1px, transparent 1px);
+		background-size: 40px 40px;
+		opacity: 0.26;
+		mask-image: radial-gradient(circle at 50% 45%, #000 45%, transparent 92%);
+	}
+
 	:global(.reveal-section.is-visible) {
 		opacity: 1;
 		transform: translateY(0);
+	}
+
+	:global(html) {
+		scroll-behavior: smooth;
 	}
 
 	:global(.is-visible .reveal-item) {
@@ -400,6 +459,10 @@
 	}
 
 	@media (prefers-reduced-motion: reduce) {
+		:global(html) {
+			scroll-behavior: auto;
+		}
+
 		.reveal-section {
 			opacity: 1;
 			transform: none;
@@ -419,7 +482,7 @@
 	:global(main),
 	:global(section),
 	:global(footer) {
-		transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+		transition: background-color 340ms ease, color 340ms ease, border-color 340ms ease;
 	}
 
 	:global(html[data-theme='dark']) {
@@ -458,11 +521,44 @@
 	}
 
 	:global(html[data-theme='dark'] .lab-note) {
-		background-color: rgba(30, 41, 59, 0.7) !important;
-		border-color: rgba(148, 163, 184, 0.35) !important;
+		background-color: rgba(15, 23, 42, 0.92) !important;
+		border-color: rgba(59, 130, 246, 0.32) !important;
+		box-shadow: inset 0 0 0 1px rgba(30, 144, 255, 0.12);
+	}
+
+	:global(html[data-theme='dark'] .lab-entry) {
+		background-color: rgba(15, 23, 42, 0.45) !important;
+		border-color: rgba(148, 163, 184, 0.3) !important;
+	}
+
+	:global(html[data-theme='dark'] .lab-entry:hover) {
+		border-color: rgba(30, 144, 255, 0.45) !important;
+		box-shadow: 0 10px 24px -18px rgba(59, 130, 246, 0.7);
+	}
+
+	:global(html[data-theme='dark'] .field-divider) {
+		border-color: rgba(148, 163, 184, 0.28) !important;
+	}
+
+	:global(html[data-theme='dark'] .lab-marker) {
+		color: #94a3b8 !important;
+	}
+
+	:global(html[data-theme='dark'] .lab-note .text-gray-500) {
+		color: #93c5fd !important;
+	}
+
+	:global(html[data-theme='dark'] .lab-note .text-gray-600) {
+		color: #dbeafe !important;
 	}
 
 	:global(html[data-theme='dark'] .faq-item:hover) {
 		background-color: rgba(30, 144, 255, 0.08) !important;
+	}
+
+	@media (max-width: 640px) {
+		.hero-grid::before {
+			inset: 8% 0% 14% 0%;
+		}
 	}
 </style>
