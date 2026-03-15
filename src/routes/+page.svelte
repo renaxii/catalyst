@@ -50,12 +50,16 @@
 			a: 'YSWS stands for You Ship, We Ship. Complete your project and share it with the world, and receive rewards for your work.'
 		},
 		{
-			q: 'What kind of projects are allowed?',
-			a: 'Almost anything, as long as it transforms a familiar system into a game or interactive experience. Creative reinterpretations are encouraged.'
+			q: 'How much does it cost?',
+			a: 'Everything is completely free!'
 		},
 		{
 			q: 'Who can participate?',
-			a: 'Any teen makers interested in building playful, experimental projects.'
+			a: 'Any teen makers (13-18) interested in building playful, experimental projects.'
+		},
+		{
+			q: 'What kind of projects are allowed?',
+			a: 'Anything, as long as it transforms a familiar system into a game or interactive experience. Creative reinterpretations are encouraged. It has to be tracked on Hackatime and open-source on Github. '
 		},
 		{
 			q: 'When will Catalyst launch?',
@@ -166,6 +170,8 @@
 	});
 </script>
 
+<div id="page-top" aria-hidden="true"></div>
+
 {#if particles.length}
 	<div class="particles-container" aria-hidden="true">
 		{#each particles as p (p.id)}
@@ -178,11 +184,17 @@
 {/if}
 
 <nav class="fixed inset-x-0 top-0 z-50 border-b border-gray-100 bg-white/90 backdrop-blur-sm">
-	<span class="absolute left-2 top-1/2 -translate-y-1/2 font-heading text-lg font-bold tracking-tight text-gray-900 sm:left-3 md:left-4">Catalyst</span>
+	<a
+		href="#page-top"
+		aria-label="Back to hero section"
+		class="absolute left-2 top-1/2 -translate-y-1/2 font-heading text-lg font-bold tracking-tight text-gray-900 no-underline hover:text-gray-900 sm:left-3 md:left-4"
+	>
+		Catalyst
+	</a>
 	<div class="mx-auto flex w-full max-w-5xl items-center justify-end px-4 py-4 sm:px-6">
 		<div class="hidden items-center gap-7 md:flex md:gap-9">
 			<ul class="hidden items-center gap-8 md:flex">
-				{#each [['#challenge', 'Challenge'], ['#experiment', 'Experiment'], ['#gallery', 'Gallery'], ['#faq', 'FAQ']] as [href, label]}
+				{#each [['#challenge', 'Challenge'], ['#document', 'Document'], ['#prizes', 'Prizes'], ['#faq', 'FAQ']] as [href, label]}
 					<li>
 						<a
 							{href}
@@ -247,7 +259,7 @@
 		class={`overflow-hidden border-t border-gray-200 bg-white transition-all duration-300 md:hidden ${mobileMenuOpen ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'}`}
 	>
 		<ul class="space-y-1 px-4 py-3 sm:px-6">
-			{#each [['#challenge', 'Challenge'], ['#experiment', 'Experiment'], ['#gallery', 'Gallery'], ['#faq', 'FAQ']] as [href, label]}
+			{#each [['#challenge', 'Challenge'], ['#document', 'Document'], ['#prizes', 'Prizes'], ['#faq', 'FAQ']] as [href, label]}
 				<li>
 					<a
 						{href}
@@ -280,6 +292,7 @@
 
 <main class="lab-grid overflow-x-hidden px-6 pt-24 pb-24 md:pt-28 md:pb-32">
 	<section
+		id="hero"
 		bind:this={heroSectionEl}
 		role="banner"
 		onmousemove={handleHeroMouseMove}
@@ -352,7 +365,7 @@
 		</p>
 		<h2 class="reveal-item mt-4 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-6xl" style="--reveal-order: 1;">
 			A simple rule:
-			<span class="block">reimagine the familiar.</span>
+			<span class="block">interface becomes interaction</span>
 		</h2>
 		<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 2;">
 			Take something people already know and transform it into something completely new.
@@ -361,7 +374,7 @@
 			Examples
 		</p>
 		<ul class="mt-3 space-y-3 text-base leading-relaxed text-gray-600 md:text-lg">
-			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 4;">Spotify → playful interactive web experience</li>
+			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 4;">Spotify → puzzle game</li>
 			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 5;">Notes app → visual novel</li>
 			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 6;">Calendar → survival sim</li>
 		</ul>
@@ -380,17 +393,17 @@
 			<span class="section-divider__line"></span>
 		</div>
 		<p
-			id="experiment"
+			id="document"
 			class="reveal-item lab-marker scroll-mt-24 font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
 			style="--reveal-order: 0;"
 		>
 			[ DOCUMENT ]
 		</p>
 		<h2 class="reveal-item mt-4 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-6xl" style="--reveal-order: 1;">
-			Document your progress.
+			Document.
 		</h2>
 		<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 2;">
-			Keep a clear devlog as you build. Share experiments, discoveries, and pivots so others can follow how your idea evolved from first concept to playable interaction.
+			Keep a clear devlog as you build. Share experiments, discoveries, and pivots so others can follow how your idea evolved.
 		</p>
 		<div
 			class="reveal-item lab-note lab-entry mt-8 rounded-xl border border-gray-200 bg-[#F8FBFF] px-5 py-5 text-[0.95rem] leading-relaxed md:px-6 md:py-6"
@@ -400,20 +413,21 @@
 			<dl class="mt-5 font-mono text-sm md:text-[0.92rem]">
 				<div class="py-3 first:pt-0">
 					<dt class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-gray-500">Subject</dt>
-					<dd class="mt-1 text-gray-600">Google Doodle-inspired mini game</dd>
+					<dd class="mt-1 text-gray-600">Wikipedia</dd>
 				</div>
 				<div class="field-divider py-3">
 					<dt class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-gray-500">Hypothesis</dt>
-					<dd class="mt-1 text-gray-600">A single playful mechanic can carry a memorable interactive experience.</dd>
+					<dd class="mt-1 text-gray-600">Wikipedia links could work like a puzzle path.</dd>
 				</div>
 				<div class="field-divider py-3">
 					<dt class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-gray-500">Experiments</dt>
-					<dd class="mt-1 text-gray-600">Input feel playtests</dd>
-					<dd class="text-gray-600">Animation timing iteration</dd>
+					<dd class="mt-1 text-gray-600">Start page and target page</dd>
+					<dd class="text-gray-600">Limited number of clicks</dd>
+					<dd class="text-gray-600">Optional hints in the article text</dd>
 				</div>
 				<div class="field-divider py-3 pb-0">
 					<dt class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-gray-500">Result</dt>
-					<dd class="mt-1 text-gray-600">Documented prototype with clear iteration notes</dd>
+					<dd class="mt-1 text-gray-600">Prototype where players try to reach the target article in as few clicks as possible</dd>
 				</div>
 			</dl>
 		</div>
@@ -469,7 +483,7 @@
 			<span class="section-divider__line"></span>
 		</div>
 		<p
-			id="rewards"
+			id="prizes"
 			class="reveal-item lab-marker scroll-mt-24 font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
 			style="--reveal-order: 0;"
 		>
@@ -791,6 +805,10 @@
 		stroke: rgba(30, 144, 255, 0.075);
 		stroke-width: 1.2;
 		stroke-linejoin: round;
+	}
+
+	.hero-title {
+		cursor: default;
 	}
 
 	.hero-title-letter {
