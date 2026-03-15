@@ -12,12 +12,36 @@
 	let themeMediaQuery;
 	let heroMouseX = $state(50);
 	let heroMouseY = $state(50);
+	let heroTitleReactionKey = $state(0);
+	let particles = $state([]);
+	let _particleId = 0;
 
 	function handleHeroMouseMove(event) {
 		const rect = heroSectionEl?.getBoundingClientRect();
 		if (!rect) return;
 		heroMouseX = ((event.clientX - rect.left) / rect.width) * 100;
 		heroMouseY = ((event.clientY - rect.top) / rect.height) * 100;
+	}
+
+	function triggerHeroTitleReaction() {
+		heroTitleReactionKey += 1;
+	}
+
+	function spawnParticles(e) {
+		e.preventDefault();
+		const x = e.clientX;
+		const y = e.clientY;
+		const count = 6;
+		const batch = Array.from({ length: count }, (_, i) => {
+			const angle = (i / count) * Math.PI * 2 - Math.PI / 2;
+			const dist = 28 + Math.random() * 20;
+			return { id: _particleId++, x, y, dx: Math.cos(angle) * dist, dy: Math.sin(angle) * dist };
+		});
+		particles = [...particles, ...batch];
+		const ids = new Set(batch.map((p) => p.id));
+		setTimeout(() => {
+			particles = particles.filter((p) => !ids.has(p.id));
+		}, 680);
 	}
 
 	const faqs = [
@@ -117,7 +141,11 @@
 
 		themeMediaQuery.addEventListener('change', handleThemeChange);
 
-		if (!heroSectionEl || typeof IntersectionObserver === 'undefined') return;
+		if (!heroSectionEl || typeof IntersectionObserver === 'undefined') {
+			return () => {
+				themeMediaQuery?.removeEventListener('change', handleThemeChange);
+			};
+		}
 
 		const heroObserver = new IntersectionObserver(
 			([entry]) => {
@@ -137,6 +165,17 @@
 		};
 	});
 </script>
+
+{#if particles.length}
+	<div class="particles-container" aria-hidden="true">
+		{#each particles as p (p.id)}
+			<span
+				class="rsvp-particle"
+				style="left: {p.x}px; top: {p.y}px; --dx: {p.dx.toFixed(2)}px; --dy: {p.dy.toFixed(2)}px;"
+			></span>
+		{/each}
+	</div>
+{/if}
 
 <nav class="fixed inset-x-0 top-0 z-50 border-b border-gray-100 bg-white/90 backdrop-blur-sm">
 	<div class="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
@@ -249,10 +288,20 @@
 	>
 		<h1
 			in:fade={{ duration: 520 }}
-			class="relative font-heading text-[clamp(2.4rem,10vw,9rem)] font-black uppercase leading-[0.86] tracking-[-0.04em] text-gray-900"
+			onmouseenter={triggerHeroTitleReaction}
+			class="hero-title relative font-heading text-[clamp(2.4rem,10vw,9rem)] font-black uppercase leading-[0.86] tracking-[-0.04em] text-gray-900"
 		>
+			{#if heroTitleReactionKey > 0}
+				{#key heroTitleReactionKey}
+					<span class="hero-title-reaction" aria-hidden="true">
+						<svg viewBox="0 0 400 360" class="hero-title-reaction__svg" focusable="false">
+							<path d="M200 32 L366 320 L34 320 Z" />
+						</svg>
+					</span>
+				{/key}
+			{/if}
 			{#each 'CATALYST'.split('') as char}
-				<span class="inline-block transition-transform duration-200 ease-out hover:-translate-y-1">{char}</span>
+				<span class="hero-title-letter inline-block transition-transform duration-200 ease-out hover:-translate-y-1">{char}</span>
 			{/each}
 		</h1>
 		<p
@@ -272,6 +321,7 @@
 			in:fade={{ duration: 520, delay: 340 }}
 			href="#"
 			aria-label="RSVP for Catalyst"
+			onclick={spawnParticles}
 			class="relative mt-5 inline-flex items-center rounded-full bg-dodger px-9 py-3.5 text-base font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-dodger/90 hover:shadow-md active:translate-y-0"
 		>
 			RSVP
@@ -286,8 +336,13 @@
 
 	<section
 		use:reveal
-		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-16 sm:py-20 md:py-28"
+		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-16 sm:py-20 md:py-28"
 	>
+		<div class="section-divider reveal-item mb-10 sm:mb-12 md:mb-14" style="--reveal-order: 0;" aria-hidden="true">
+			<span class="section-divider__line"></span>
+			<span class="section-divider__triangle">△</span>
+			<span class="section-divider__line"></span>
+		</div>
 		<p
 			id="challenge"
 			class="reveal-item lab-marker scroll-mt-24 font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
@@ -317,8 +372,13 @@
 
 	<section
 		use:reveal
-		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-16 sm:py-20 md:py-28"
+		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-16 sm:py-20 md:py-28"
 	>
+		<div class="section-divider reveal-item mb-10 sm:mb-12 md:mb-14" style="--reveal-order: 0;" aria-hidden="true">
+			<span class="section-divider__line"></span>
+			<span class="section-divider__triangle">▽</span>
+			<span class="section-divider__line"></span>
+		</div>
 		<p
 			id="experiment"
 			class="reveal-item lab-marker scroll-mt-24 font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
@@ -362,8 +422,13 @@
 
 	<section
 		use:reveal
-		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-16 sm:py-20 md:py-28"
+		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-16 sm:py-20 md:py-28"
 	>
+		<div class="section-divider reveal-item mb-10 sm:mb-12 md:mb-14" style="--reveal-order: 0;" aria-hidden="true">
+			<span class="section-divider__line"></span>
+			<span class="section-divider__triangle">△̶</span>
+			<span class="section-divider__line"></span>
+		</div>
 		<p
 			id="gallery"
 			class="reveal-item lab-marker scroll-mt-24 font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
@@ -397,8 +462,13 @@
 
 	<section
 		use:reveal
-		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-16 sm:py-20 md:py-28"
+		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-16 sm:py-20 md:py-28"
 	>
+		<div class="section-divider reveal-item mb-10 sm:mb-12 md:mb-14" style="--reveal-order: 0;" aria-hidden="true">
+			<span class="section-divider__line"></span>
+			<span class="section-divider__triangle">▽̶</span>
+			<span class="section-divider__line"></span>
+		</div>
 		<p
 			id="rewards"
 			class="reveal-item lab-marker scroll-mt-24 font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
@@ -413,17 +483,61 @@
 			Ship your experiment to receive rewards such as game grants, console grants, and
 			useful software tools (subject to change).
 		</p>
-		<ul class="mt-8 space-y-3 text-base leading-relaxed text-gray-600 md:text-lg">
-			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 3;">game grants</li>
-			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 4;">console grants</li>
-			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 5;">software licenses</li>
-		</ul>
+		<div class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-3">
+			<div class="reveal-item prize-card lab-entry rounded-xl border border-gray-200 bg-white overflow-hidden" style="--reveal-order: 3;">
+				<div class="prize-card-img-wrap h-40 overflow-hidden bg-gray-100">
+					<img
+						src="https://cdn.fastly.steamstatic.com/store/home/store_home_share.jpg"
+						alt="Steam storefront"
+						class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+						loading="lazy"
+					/>
+				</div>
+				<div class="p-4">
+					<p class="font-mono text-[0.67rem] font-semibold uppercase tracking-[0.18em] text-dodger">Game Grants</p>
+					<p class="mt-1.5 text-sm leading-relaxed text-gray-600">Win Steam, Nintendo, or other game grants to inspire your next experiment.</p>
+				</div>
+			</div>
+			<div class="reveal-item prize-card lab-entry rounded-xl border border-gray-200 bg-white overflow-hidden" style="--reveal-order: 4;">
+				<div class="prize-card-img-wrap h-40 overflow-hidden bg-gray-100">
+					<img
+						src="https://assets.nintendo.com/image/upload/q_auto/f_auto/c_fill,w_1200/ncom/en_US/articles/2025/nintendo-switch-2-to-be-released-in-2025/1920x1080_WN_PR01162025"
+						alt="Nintendo Switch 2"
+						class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+						loading="lazy"
+					/>
+				</div>
+				<div class="p-4">
+					<p class="font-mono text-[0.67rem] font-semibold uppercase tracking-[0.18em] text-dodger">Console Grants</p>
+					<p class="mt-1.5 text-sm leading-relaxed text-gray-600">Nintendo Switch or similar console rewards for shipping a great project.</p>
+				</div>
+			</div>
+			<div class="reveal-item prize-card lab-entry rounded-xl border border-gray-200 bg-white overflow-hidden" style="--reveal-order: 5;">
+				<div class="prize-card-img-wrap h-40 overflow-hidden bg-gray-100">
+					<img
+						src="https://cdn.prod.website-files.com/6640f16222f995bdbeda98c8/6764328deb4eec9c082baebf_adobe%20creative%20cloud%20apps%20-%20Copy.png"
+						alt="Adobe Creative Cloud apps"
+						class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+						loading="lazy"
+					/>
+				</div>
+				<div class="p-4">
+					<p class="font-mono text-[0.67rem] font-semibold uppercase tracking-[0.18em] text-dodger">Software Licenses</p>
+					<p class="mt-1.5 text-sm leading-relaxed text-gray-600">Professional tools for development and design to level up your workflow.</p>
+				</div>
+			</div>
+		</div>
 	</section>
 
 	<section
 		use:reveal
-		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl border-t border-gray-200 py-16 sm:py-20 md:py-28"
+		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-16 sm:py-20 md:py-28"
 	>
+		<div class="section-divider reveal-item mb-10 sm:mb-12 md:mb-14" style="--reveal-order: 0;" aria-hidden="true">
+			<span class="section-divider__line"></span>
+			<span class="section-divider__triangle">✦</span>
+			<span class="section-divider__line"></span>
+		</div>
 		<p
 			id="faq"
 			class="reveal-item lab-marker scroll-mt-24 font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
@@ -560,6 +674,54 @@
 		color: #1e90ff;
 	}
 
+	.section-divider {
+		display: flex;
+		align-items: center;
+		gap: 0.8rem;
+	}
+
+	.section-divider__line {
+		flex: 1;
+		height: 1px;
+		background: linear-gradient(
+			90deg,
+			transparent 0%,
+			rgba(30, 144, 255, 0.14) 16%,
+			rgba(30, 144, 255, 0.24) 50%,
+			rgba(30, 144, 255, 0.14) 84%,
+			transparent 100%
+		);
+	}
+
+	.section-divider__triangle {
+		flex: none;
+		font-size: 0.78rem;
+		line-height: 1;
+		color: rgba(30, 144, 255, 0.56);
+		opacity: 0;
+		transform: rotate(-10deg) scale(0.88);
+		transform-origin: center;
+	}
+
+	:global(.reveal-section.is-visible) .section-divider__triangle {
+		animation: divider-triangle-settle 460ms cubic-bezier(0.22, 0.61, 0.36, 1) 80ms both;
+	}
+
+	@keyframes divider-triangle-settle {
+		0% {
+			opacity: 0;
+			transform: rotate(-10deg) translateY(2px) scale(0.84);
+		}
+		65% {
+			opacity: 0.9;
+			transform: rotate(2deg) translateY(0) scale(1);
+		}
+		100% {
+			opacity: 1;
+			transform: rotate(0deg) translateY(0) scale(1);
+		}
+	}
+
 	.hero-grid::before {
 		content: '';
 		position: absolute;
@@ -586,6 +748,55 @@
 		background-position: calc(50% + var(--grid-ox, 0px)) calc(50% + var(--grid-oy, 0px));
 		mask-image: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), black 0%, transparent 100%);
 		transition: background-position 600ms ease-out;
+	}
+
+	.hero-title-reaction {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		width: clamp(18rem, 34vw, 25rem);
+		transform: translate(-50%, -54%);
+		pointer-events: none;
+		z-index: 0;
+		animation: hero-title-reaction 1s ease-out forwards;
+	}
+
+	.hero-title-reaction__svg {
+		display: block;
+		width: 100%;
+		height: auto;
+		overflow: visible;
+	}
+
+	.hero-title-reaction__svg path {
+		fill: none;
+		stroke: rgba(30, 144, 255, 0.075);
+		stroke-width: 1.2;
+		stroke-linejoin: round;
+	}
+
+	.hero-title-letter {
+		position: relative;
+		z-index: 1;
+	}
+
+	@keyframes hero-title-reaction {
+		0% {
+			opacity: 0;
+			transform: translate(-50%, -54%) scale(0.97) rotate(-8deg);
+		}
+		20% {
+			opacity: 1;
+			transform: translate(-50%, -54%) scale(1) rotate(2deg);
+		}
+		50% {
+			opacity: 1;
+			transform: translate(-50%, -54%) scale(1) rotate(0deg);
+		}
+		100% {
+			opacity: 0;
+			transform: translate(-50%, -54%) scale(1.01) rotate(0deg);
+		}
 	}
 
 	:global(.reveal-section.is-visible) {
@@ -618,6 +829,39 @@
 		transform: translateY(0);
 	}
 
+	/* ── RSVP burst particles ── */
+	.particles-container {
+		position: fixed;
+		inset: 0;
+		pointer-events: none;
+		z-index: 9998;
+		overflow: hidden;
+	}
+
+	.rsvp-particle {
+		position: absolute;
+		width: 5px;
+		height: 5px;
+		background: #1e90ff;
+		border-radius: 1px;
+		transform: translate(-50%, -50%);
+		animation: particle-burst 580ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+	}
+
+	@keyframes particle-burst {
+		0% {
+			opacity: 0.9;
+			transform: translate(-50%, -50%) translate(0px, 0px) scale(1.3);
+		}
+		70% {
+			opacity: 0.5;
+		}
+		100% {
+			opacity: 0;
+			transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) scale(0.2);
+		}
+	}
+
 	@media (prefers-reduced-motion: reduce) {
 		:global(html) {
 			scroll-behavior: auto;
@@ -633,6 +877,20 @@
 			opacity: 1;
 			transform: none;
 			transition: none;
+		}
+
+		.rsvp-particle {
+			display: none;
+		}
+
+		.hero-title-reaction {
+			display: none;
+		}
+
+		.section-divider__triangle {
+			opacity: 1;
+			transform: none;
+			animation: none !important;
 		}
 	}
 
@@ -663,6 +921,10 @@
 		background-color: #0f172a !important;
 	}
 
+	:global(html[data-theme='dark'] .hero-title-reaction__svg path) {
+		stroke: rgba(147, 197, 253, 0.1);
+	}
+
 	:global(html[data-theme='dark'] .text-gray-900) {
 		color: #e5e7eb !important;
 	}
@@ -679,6 +941,21 @@
 	:global(html[data-theme='dark'] .border-gray-100),
 	:global(html[data-theme='dark'] .border-gray-200) {
 		border-color: rgba(148, 163, 184, 0.3) !important;
+	}
+
+	:global(html[data-theme='dark'] .section-divider__line) {
+		background: linear-gradient(
+			90deg,
+			transparent 0%,
+			rgba(96, 165, 250, 0.2) 16%,
+			rgba(96, 165, 250, 0.32) 50%,
+			rgba(96, 165, 250, 0.2) 84%,
+			transparent 100%
+		);
+	}
+
+	:global(html[data-theme='dark'] .section-divider__triangle) {
+		color: rgba(147, 197, 253, 0.78);
 	}
 
 	:global(html[data-theme='dark'] .lab-note) {
@@ -703,6 +980,19 @@
 
 	:global(html[data-theme='dark'] .gallery-info-card .text-gray-600) {
 		color: #e2e8f0 !important;
+	}
+
+	:global(html[data-theme='dark'] .prize-card) {
+		background-color: rgba(15, 23, 42, 0.6) !important;
+		border-color: rgba(148, 163, 184, 0.3) !important;
+	}
+
+	:global(html[data-theme='dark'] .prize-card-img-wrap) {
+		background-color: rgba(15, 23, 42, 0.8) !important;
+	}
+
+	:global(html[data-theme='dark'] .prize-card .text-gray-600) {
+		color: #d1d9e6 !important;
 	}
 
 	:global(html[data-theme='dark'] .lab-entry:hover) {

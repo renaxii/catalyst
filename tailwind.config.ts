@@ -11,7 +11,8 @@ const config: Config = {
         lavender: "#D8BFD8",
         butter: "#F6D365",
         ink: "#3A3A3A",
-        dodger: "#1E90FF"
+        dodger: "#1E90FF",
+        "lab-note": "#F8FBFF"
       },
       fontFamily: {
         heading: ['Outfit', 'sans-serif'],
