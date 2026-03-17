@@ -175,7 +175,7 @@
 	.process-chip-row {
 		width: 100%;
 		display: flex;
-		align-items: center;
+		align-items: flex-start;
 		justify-content: flex-start;
 		gap: 0.75rem;
 		opacity: 0;
@@ -183,12 +183,13 @@
 	}
 
 	.process-chip-icon {
-		flex: none;
-		width: 0.95rem;
-		height: 0.95rem;
+		flex: 0 0 1rem;
+		width: 1rem;
+		height: 1rem;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
+		margin-top: 1.05rem;
 		opacity: var(--icon-opacity, 0.56);
 		transform: rotate(var(--icon-rotate, 0deg)) scale(var(--icon-scale, 1));
 		transform-origin: center;
@@ -291,19 +292,36 @@
 	}
 
 	@media (max-width: 720px) {
+		.process-chip-stack {
+			gap: 0.75rem;
+		}
+
+		.process-chip-row {
+			gap: 0.65rem;
+		}
+
+		.process-chip-icon {
+			margin-top: 0.85rem;
+		}
+
 		.process-chip-hit {
-			grid-template-columns: minmax(0, 1fr);
-			gap: 0.5rem;
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.45rem;
+			min-width: 0;
 		}
 
 		.process-chip-explanation {
 			white-space: normal;
-			padding-left: 0.25rem;
-			padding-top: 0.75rem;
+			padding-left: 0.1rem;
+			padding-top: 0.6rem;
 		}
 
 		.process-chip-pill {
 			width: 100%;
+			min-height: 2.7rem;
+			padding: 0.6rem 1.05rem;
 		}
 	}
 

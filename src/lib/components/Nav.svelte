@@ -16,11 +16,11 @@
 	<a
 		href="#page-top"
 		aria-label="Back to hero section"
-		class="micro-interactive absolute left-2 top-1/2 -translate-y-1/2 font-heading text-lg font-bold tracking-tight text-gray-900 no-underline hover:text-gray-900 sm:left-3 md:left-4"
+		class="micro-interactive absolute left-2 top-1/2 z-10 -translate-y-1/2 font-heading text-lg font-bold leading-none tracking-tight text-gray-900 no-underline hover:text-gray-900 sm:left-3 md:left-4"
 	>
 		Catalyst
 	</a>
-	<div class="mx-auto flex w-full max-w-5xl items-center justify-end px-4 py-4 sm:px-6">
+	<div class="mx-auto flex h-16 w-full max-w-5xl items-center justify-end px-4 sm:px-6">
 		<div class="hidden items-center gap-7 md:flex md:gap-9">
 			<ul class="hidden items-center gap-8 md:flex">
 				{#each [['#challenge', 'Challenge'], ['#process', 'Process'], ['#prizes', 'Prizes'], ['#faq', 'FAQ']] as [href, label]}
@@ -85,7 +85,7 @@
 	</div>
 	<div
 		id="mobile-nav-menu"
-		class={`overflow-hidden border-t border-gray-200 bg-white transition-all duration-300 md:hidden ${mobileMenuOpen ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'}`}
+		class={`absolute inset-x-0 top-full border-t border-gray-200 bg-white shadow-lg transition-all duration-220 md:hidden ${mobileMenuOpen ? 'pointer-events-auto translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0'}`}
 	>
 		<ul class="space-y-1 px-4 py-3 sm:px-6">
 			{#each [['#challenge', 'Challenge'], ['#process', 'Process'], ['#prizes', 'Prizes'], ['#faq', 'FAQ']] as [href, label]}
