@@ -12,15 +12,126 @@
 	let themeMediaQuery;
 	let heroMouseX = $state(50);
 	let heroMouseY = $state(50);
+	let heroTargetMouseX = 50;
+	let heroTargetMouseY = 50;
+	let heroTriangleEnergy = $state(0);
+	let heroTargetTriangleEnergy = 0;
 	let heroTitleReactionKey = $state(0);
+	let cursorCatalysts = $state([]);
+	let prefersReducedMotion = $state(false);
 	let particles = $state([]);
+	let openProcessSteps = $state([]);
+	let hoverProcessStep = $state(null);
 	let _particleId = 0;
+	let _cursorCatalystId = 0;
+	let lastCursorCatalystAt = 0;
+	let heroCursorRafId;
+
+	const processSteps = [
+		{
+			title: 'start with something familiar',
+			description: 'a doc editor, wiki, music player',
+			iconRotate: '-18deg',
+			iconOpacity: 0.5,
+			iconScale: 0.98
+		},
+		{
+			title: 'reinterpret it',
+			description: 'turn interactions into mechanics',
+			iconRotate: '12deg',
+			iconOpacity: 0.62,
+			iconScale: 1
+		},
+		{
+			title: 'keep track',
+			description: 'what worked, what didn\'t?',
+			iconRotate: '180deg',
+			iconOpacity: 0.56,
+			iconScale: 0.94
+		},
+		{
+			title: 'make it real',
+			description: 'build something playable',
+			iconRotate: '28deg',
+			iconOpacity: 0.68,
+			iconScale: 1.02
+		},
+		{
+			title: 'earn points',
+			description: 'get rewards or start your next build',
+			iconRotate: '-34deg',
+			iconOpacity: 0.6,
+			iconScale: 0.96
+		}
+	];
+
+	function isProcessStepOpen(index) {
+		return openProcessSteps.includes(index);
+	}
+
+	function isProcessStepActive(index) {
+		return isProcessStepOpen(index) || hoverProcessStep === index;
+	}
+
+	function setProcessStepHover(index) {
+		hoverProcessStep = index;
+	}
+
+	function clearProcessStepHover(index) {
+		if (hoverProcessStep === index) hoverProcessStep = null;
+	}
+
+	function toggleProcessStep(index) {
+		if (isProcessStepOpen(index)) {
+			openProcessSteps = openProcessSteps.filter((stepIndex) => stepIndex !== index);
+			if (hoverProcessStep === index) hoverProcessStep = null;
+			return;
+		}
+
+		openProcessSteps = [...openProcessSteps, index];
+		hoverProcessStep = index;
+	}
 
 	function handleHeroMouseMove(event) {
 		const rect = heroSectionEl?.getBoundingClientRect();
 		if (!rect) return;
-		heroMouseX = ((event.clientX - rect.left) / rect.width) * 100;
-		heroMouseY = ((event.clientY - rect.top) / rect.height) * 100;
+		const localX = event.clientX - rect.left;
+		const localY = event.clientY - rect.top;
+		heroTargetMouseX = (localX / rect.width) * 100;
+		heroTargetMouseY = (localY / rect.height) * 100;
+
+		const triangleX = rect.width * 0.5;
+		const triangleY = rect.height * 0.46;
+		const distance = Math.hypot(localX - triangleX, localY - triangleY);
+		const radius = Math.min(rect.width, rect.height) * 0.38;
+		heroTargetTriangleEnergy = Math.max(0, 1 - distance / radius);
+		triggerCursorCatalyst(localX, localY, rect.width, rect.height);
+	}
+
+	function triggerCursorCatalyst(localX, localY, width, height) {
+		if (prefersReducedMotion) return;
+		const now = performance.now();
+		if (now - lastCursorCatalystAt < 120) return;
+		lastCursorCatalystAt = now;
+
+		const angle = Math.random() * Math.PI * 2;
+		const radius = Math.random() * 120;
+		const x = Math.max(0, Math.min(width, localX + Math.cos(angle) * radius));
+		const y = Math.max(0, Math.min(height, localY + Math.sin(angle) * radius));
+		const duration = 560 + Math.random() * 80;
+		const scale = 1.05 + Math.random() * 0.05;
+		const item = {
+			id: _cursorCatalystId++,
+			x,
+			y,
+			duration,
+			scale
+		};
+
+		cursorCatalysts = [...cursorCatalysts, item].slice(-6);
+		setTimeout(() => {
+			cursorCatalysts = cursorCatalysts.filter((c) => c.id !== item.id);
+		}, duration + 80);
 	}
 
 	function triggerHeroTitleReaction() {
@@ -55,11 +166,15 @@
 		},
 		{
 			q: 'Who can participate?',
-			a: 'Any teen makers (13-18) interested in building playful, experimental projects.'
+			a: 'Anyone between the ages of 13 - 18 is welcome to participate. No experience is necessary, just a willingness to experiment and have fun!'
 		},
 		{
 			q: 'What kind of projects are allowed?',
-			a: 'Anything, as long as it transforms a familiar system into a game or interactive experience. Creative reinterpretations are encouraged. It has to be tracked on Hackatime and open-source on Github. '
+			a: 'Anything that reinterprets an interface and turns it into something interactive (not necessarily a game). Projects should be tracked on Hackatime and open-source on GitHub.'
+		},
+		{
+			q: 'Can I work with other people?',
+			a: 'Absolutely! Collaborating with others is encouraged. You can form teams of up to 3 people and work together on your projects. However, each person\'s contributions should be tracked seperately.'
 		},
 		{
 			q: 'When will Catalyst launch?',
@@ -135,6 +250,8 @@
 	onMount(() => {
 		const stored = localStorage.getItem(THEME_KEY);
 		themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+		const reducedMotionMediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+		prefersReducedMotion = reducedMotionMediaQuery.matches;
 		manualThemeSet = stored === 'light' || stored === 'dark';
 		applyTheme(manualThemeSet ? stored === 'dark' : themeMediaQuery.matches);
 
@@ -143,11 +260,29 @@
 			applyTheme(event.matches);
 		};
 
+		const handleReducedMotionChange = (event) => {
+			prefersReducedMotion = event.matches;
+			if (event.matches) cursorCatalysts = [];
+		};
+
+		const animateHeroCursor = () => {
+			const factor = prefersReducedMotion ? 0.22 : 0.14;
+			heroMouseX += (heroTargetMouseX - heroMouseX) * factor;
+			heroMouseY += (heroTargetMouseY - heroMouseY) * factor;
+			heroTriangleEnergy += (heroTargetTriangleEnergy - heroTriangleEnergy) * factor;
+			heroCursorRafId = requestAnimationFrame(animateHeroCursor);
+		};
+
+		heroCursorRafId = requestAnimationFrame(animateHeroCursor);
+
 		themeMediaQuery.addEventListener('change', handleThemeChange);
+		reducedMotionMediaQuery.addEventListener('change', handleReducedMotionChange);
 
 		if (!heroSectionEl || typeof IntersectionObserver === 'undefined') {
 			return () => {
+				cancelAnimationFrame(heroCursorRafId);
 				themeMediaQuery?.removeEventListener('change', handleThemeChange);
+				reducedMotionMediaQuery.removeEventListener('change', handleReducedMotionChange);
 			};
 		}
 
@@ -164,8 +299,10 @@
 		heroObserver.observe(heroSectionEl);
 
 		return () => {
+			cancelAnimationFrame(heroCursorRafId);
 			heroObserver.disconnect();
 			themeMediaQuery?.removeEventListener('change', handleThemeChange);
+			reducedMotionMediaQuery.removeEventListener('change', handleReducedMotionChange);
 		};
 	});
 </script>
@@ -187,18 +324,18 @@
 	<a
 		href="#page-top"
 		aria-label="Back to hero section"
-		class="absolute left-2 top-1/2 -translate-y-1/2 font-heading text-lg font-bold tracking-tight text-gray-900 no-underline hover:text-gray-900 sm:left-3 md:left-4"
+		class="micro-interactive absolute left-2 top-1/2 -translate-y-1/2 font-heading text-lg font-bold tracking-tight text-gray-900 no-underline hover:text-gray-900 sm:left-3 md:left-4"
 	>
 		Catalyst
 	</a>
 	<div class="mx-auto flex w-full max-w-5xl items-center justify-end px-4 py-4 sm:px-6">
 		<div class="hidden items-center gap-7 md:flex md:gap-9">
 			<ul class="hidden items-center gap-8 md:flex">
-				{#each [['#challenge', 'Challenge'], ['#document', 'Document'], ['#prizes', 'Prizes'], ['#faq', 'FAQ']] as [href, label]}
+				{#each [['#challenge', 'Challenge'], ['#process', 'Process'], ['#prizes', 'Prizes'], ['#faq', 'FAQ']] as [href, label]}
 					<li>
 						<a
 							{href}
-							class="group relative inline-block -translate-y-0 text-sm font-medium text-gray-500 transition-all duration-200 hover:-translate-y-0.5 hover:text-dodger"
+							class="micro-interactive group relative inline-block -translate-y-0 text-sm font-medium text-gray-500 transition-all duration-200 hover:-translate-y-0.5 hover:text-dodger"
 						>
 							{label}
 							<span
@@ -211,7 +348,7 @@
 			<button
 				type="button"
 				onclick={toggleTheme}
-				class={`inline-flex h-8 w-[5.35rem] items-center justify-center rounded-full border px-3 text-xs font-semibold uppercase tracking-wider transition-all duration-200 ${
+				class={`micro-interactive inline-flex h-8 w-[5.35rem] items-center justify-center rounded-full border px-3 text-xs font-semibold uppercase tracking-wider transition-all duration-200 ${
 					isDark
 						? 'border-dodger/40 bg-dodger/15 text-dodger'
 						: 'border-gray-200 bg-white text-gray-600 hover:border-dodger/40 hover:text-dodger'
@@ -225,7 +362,7 @@
 				type="button"
 				onclick={toggleTheme}
 				aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-				class={`inline-flex h-10 w-[5.35rem] items-center justify-center rounded-full border px-3 text-xs font-semibold uppercase tracking-wider transition-all duration-200 ${
+				class={`micro-interactive inline-flex h-10 w-[5.35rem] items-center justify-center rounded-full border px-3 text-xs font-semibold uppercase tracking-wider transition-all duration-200 ${
 					isDark
 						? 'border-dodger/40 bg-dodger/15 text-dodger'
 						: 'border-gray-200 bg-white text-gray-600 hover:border-dodger/40 hover:text-dodger'
@@ -239,7 +376,7 @@
 				aria-expanded={mobileMenuOpen}
 				aria-controls="mobile-nav-menu"
 				aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-				class="inline-flex h-10 w-10 items-center justify-center rounded-md border border-gray-200 text-gray-600 transition-colors duration-200 hover:border-dodger/40 hover:text-dodger"
+				class="micro-interactive inline-flex h-10 w-10 items-center justify-center rounded-md border border-gray-200 text-gray-600 transition-colors duration-200 hover:border-dodger/40 hover:text-dodger"
 			>
 				<svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 					{#if mobileMenuOpen}
@@ -259,12 +396,12 @@
 		class={`overflow-hidden border-t border-gray-200 bg-white transition-all duration-300 md:hidden ${mobileMenuOpen ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'}`}
 	>
 		<ul class="space-y-1 px-4 py-3 sm:px-6">
-			{#each [['#challenge', 'Challenge'], ['#document', 'Document'], ['#prizes', 'Prizes'], ['#faq', 'FAQ']] as [href, label]}
+			{#each [['#challenge', 'Challenge'], ['#process', 'Process'], ['#prizes', 'Prizes'], ['#faq', 'FAQ']] as [href, label]}
 				<li>
 					<a
 						{href}
 						onclick={closeMobileMenu}
-						class="block rounded-md px-3 py-2.5 text-sm font-medium text-gray-600 transition-colors duration-200 hover:bg-dodger/10 hover:text-dodger"
+						class="micro-interactive block rounded-md px-3 py-2.5 text-sm font-medium text-gray-600 transition-colors duration-200 hover:text-dodger"
 					>
 						{label}
 					</a>
@@ -290,15 +427,30 @@
 	/>
 </a>
 
-<main class="lab-grid overflow-x-hidden px-6 pt-24 pb-24 md:pt-28 md:pb-32">
+	<main class="lab-grid overflow-x-hidden px-6 pt-24 pb-16 md:pt-28 md:pb-20">
 	<section
 		id="hero"
 		bind:this={heroSectionEl}
 		role="banner"
 		onmousemove={handleHeroMouseMove}
 		class="hero-grid relative mx-auto flex min-h-[calc(100svh-4.5rem)] w-full max-w-5xl flex-col items-center justify-center pb-16 text-center sm:pb-20 md:pb-28"
-		style="--grid-ox: {((heroMouseX - 50) * 0.1).toFixed(2)}px; --grid-oy: {((heroMouseY - 50) * 0.1).toFixed(2)}px; --mx: {heroMouseX.toFixed(1)}%; --my: {heroMouseY.toFixed(1)}%;"
+		style="--grid-ox: {((heroMouseX - 50) * 0.1).toFixed(2)}px; --grid-oy: {((heroMouseY - 50) * 0.1).toFixed(2)}px; --mx: {heroMouseX.toFixed(1)}%; --my: {heroMouseY.toFixed(1)}%; --triangle-energy: {heroTriangleEnergy.toFixed(3)}; --grid-boost: {prefersReducedMotion ? '0' : '1'};"
 	>
+		{#if cursorCatalysts.length}
+			<div class="cursor-catalyst-layer" aria-hidden="true">
+				{#each cursorCatalysts as catalyst (catalyst.id)}
+					<span
+						class="cursor-catalyst-triangle"
+						style="left: {catalyst.x}px; top: {catalyst.y}px; --catalyst-duration: {catalyst.duration.toFixed(0)}ms; --catalyst-scale: {catalyst.scale.toFixed(2)};"
+					>
+						<svg viewBox="0 0 22 20" class="cursor-catalyst-triangle__svg" focusable="false">
+							<path d="M11 2 L20 18 L2 18 Z" />
+						</svg>
+					</span>
+				{/each}
+			</div>
+		{/if}
+		<span class="hero-catalyst-triangle" aria-hidden="true"></span>
 		<h1
 			in:fade={{ duration: 520 }}
 			onmouseenter={triggerHeroTitleReaction}
@@ -335,7 +487,7 @@
 			href="#"
 			aria-label="RSVP for Catalyst"
 			onclick={spawnParticles}
-			class="relative mt-5 inline-flex items-center rounded-full bg-dodger px-9 py-3.5 text-base font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-dodger/90 hover:shadow-md active:translate-y-0"
+			class="micro-interactive relative mt-5 inline-flex items-center rounded-full bg-dodger px-9 py-3.5 text-base font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-dodger/90 hover:shadow-md active:translate-y-0"
 		>
 			RSVP
 		</a>
@@ -349,7 +501,7 @@
 
 	<section
 		use:reveal
-		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-16 sm:py-20 md:py-28"
+		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-12 sm:py-14 md:py-16"
 	>
 		<div class="section-divider reveal-item mb-10 sm:mb-12 md:mb-14" style="--reveal-order: 0;" aria-hidden="true">
 			<span class="section-divider__line"></span>
@@ -374,9 +526,9 @@
 			Examples
 		</p>
 		<ul class="mt-3 space-y-3 text-base leading-relaxed text-gray-600 md:text-lg">
-			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 4;">Spotify → puzzle game</li>
-			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 5;">Notes app → visual novel</li>
-			<li class="reveal-item rounded-md px-3 -mx-3 transition-colors duration-200 hover:bg-dodger/5" style="--reveal-order: 6;">Calendar → survival sim</li>
+			<li class="challenge-example reveal-item" style="--reveal-order: 4;">Spotify → puzzle game</li>
+			<li class="challenge-example reveal-item" style="--reveal-order: 5;">Notes app → visual novel</li>
+			<li class="challenge-example reveal-item" style="--reveal-order: 6;">Calendar → survival sim</li>
 		</ul>
 		<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 7;">
 			The more unexpected the transformation, the better.
@@ -385,7 +537,7 @@
 
 	<section
 		use:reveal
-		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-16 sm:py-20 md:py-28"
+		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-12 sm:py-14 md:py-16"
 	>
 		<div class="section-divider reveal-item mb-10 sm:mb-12 md:mb-14" style="--reveal-order: 0;" aria-hidden="true">
 			<span class="section-divider__line"></span>
@@ -393,89 +545,56 @@
 			<span class="section-divider__line"></span>
 		</div>
 		<p
-			id="document"
+			id="process"
 			class="reveal-item lab-marker scroll-mt-24 font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
 			style="--reveal-order: 0;"
 		>
-			[ DOCUMENT ]
+			[ PROCESS ]
 		</p>
-		<h2 class="reveal-item mt-4 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-6xl" style="--reveal-order: 1;">
-			Document.
+		<h2 class="reveal-item process-title mt-4 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-6xl" style="--reveal-order: 1;">
+			<span class="process-reaction" aria-hidden="true">
+				<svg viewBox="0 0 400 360" class="process-reaction__svg" focusable="false">
+					<path d="M200 30 L365 320 L35 320 Z" />
+				</svg>
+			</span>
+			Here's an outline of the process:
 		</h2>
 		<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 2;">
-			Keep a clear devlog as you build. Share experiments, discoveries, and pivots so others can follow how your idea evolved.
+			Like a reaction chain, each stage transforms the idea and passes momentum to the next.
 		</p>
-		<div
-			class="reveal-item lab-note lab-entry mt-8 rounded-xl border border-gray-200 bg-[#F8FBFF] px-5 py-5 text-[0.95rem] leading-relaxed md:px-6 md:py-6"
-			style="--reveal-order: 3;"
-		>
-			<p class="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">Experiment #001</p>
-			<dl class="mt-5 font-mono text-sm md:text-[0.92rem]">
-				<div class="py-3 first:pt-0">
-					<dt class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-gray-500">Subject</dt>
-					<dd class="mt-1 text-gray-600">Wikipedia</dd>
+		<div class="process-chip-stack mt-10" aria-label="Catalyst process steps">
+			{#each processSteps as step, index}
+				<div
+					class={`process-chip-row ${isProcessStepActive(index) ? 'is-active' : ''}`}
+					style={`--chip-order: ${index}; --icon-rotate: ${step.iconRotate}; --icon-opacity: ${step.iconOpacity}; --icon-scale: ${step.iconScale};`}
+				>
+					<span class="process-chip-icon" aria-hidden="true">
+						<svg viewBox="0 0 20 18" class="process-chip-icon__svg" focusable="false">
+							<path d="M10 2 L18 16 L2 16 Z" />
+						</svg>
+					</span>
+					<button
+						type="button"
+						class={`process-chip-hit ${isProcessStepActive(index) ? 'is-active' : ''}`}
+						onmouseenter={() => setProcessStepHover(index)}
+						onmouseleave={() => clearProcessStepHover(index)}
+						onfocus={() => setProcessStepHover(index)}
+						onblur={() => clearProcessStepHover(index)}
+						onclick={() => toggleProcessStep(index)}
+						aria-expanded={isProcessStepOpen(index)}
+						aria-label={`${step.title}: ${step.description}`}
+					>
+						<span class="process-chip-pill">{step.title}</span>
+						<span class="process-chip-explanation" aria-hidden={!isProcessStepActive(index)}>{step.description}</span>
+					</button>
 				</div>
-				<div class="field-divider py-3">
-					<dt class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-gray-500">Hypothesis</dt>
-					<dd class="mt-1 text-gray-600">Wikipedia links could work like a puzzle path.</dd>
-				</div>
-				<div class="field-divider py-3">
-					<dt class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-gray-500">Experiments</dt>
-					<dd class="mt-1 text-gray-600">Start page and target page</dd>
-					<dd class="text-gray-600">Limited number of clicks</dd>
-					<dd class="text-gray-600">Optional hints in the article text</dd>
-				</div>
-				<div class="field-divider py-3 pb-0">
-					<dt class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-gray-500">Result</dt>
-					<dd class="mt-1 text-gray-600">Prototype where players try to reach the target article in as few clicks as possible</dd>
-				</div>
-			</dl>
+			{/each}
 		</div>
 	</section>
 
 	<section
 		use:reveal
-		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-16 sm:py-20 md:py-28"
-	>
-		<div class="section-divider reveal-item mb-10 sm:mb-12 md:mb-14" style="--reveal-order: 0;" aria-hidden="true">
-			<span class="section-divider__line"></span>
-			<span class="section-divider__triangle">△̶</span>
-			<span class="section-divider__line"></span>
-		</div>
-		<p
-			id="gallery"
-			class="reveal-item lab-marker scroll-mt-24 font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
-			style="--reveal-order: 0;"
-		>
-			[ GALLERY ]
-		</p>
-		<h2 class="reveal-item mt-4 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-6xl" style="--reveal-order: 1;">
-			Take a look at others' work. 
-		</h2>
-		<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 2;">
-			Completed experiments will appear here if Catalyst launches and projects are submitted.
-		</p>
-		<div class="reveal-item mt-8 grid grid-cols-1 gap-3 md:grid-cols-2" style="--reveal-order: 3;">
-			<div class="gallery-info-card rounded-lg border border-gray-200 p-4">
-				<p class="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-gray-500">Gallery feed</p>
-				<p class="mt-2 text-sm text-gray-600 md:text-base">Experiments will appear here after submissions open.</p>
-			</div>
-			<div class="gallery-info-card rounded-lg border border-gray-200 p-4">
-				<p class="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-gray-500">Submission status</p>
-				<p class="mt-2 text-sm text-gray-600 md:text-base">Your project can be featured after review once Catalyst launches.</p>
-			</div>
-			<div class="md:col-span-2">
-			<p class="inline-flex items-center gap-2 rounded-full border border-dodger/20 bg-dodger/10 px-3 py-1 font-mono text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-dodger">
-				<span class="inline-block h-1.5 w-1.5 rounded-full bg-dodger [animation:pulse_2.8s_ease-in-out_infinite]"></span>
-				Gallery coming soon
-			</p>
-			</div>
-		</div>
-	</section>
-
-	<section
-		use:reveal
-		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-16 sm:py-20 md:py-28"
+		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-12 sm:py-14 md:py-16"
 	>
 		<div class="section-divider reveal-item mb-10 sm:mb-12 md:mb-14" style="--reveal-order: 0;" aria-hidden="true">
 			<span class="section-divider__line"></span>
@@ -493,7 +612,7 @@
 			Win epic prizes!
 		</h2>
 		<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 2;">
-			Ship your experiment to receive rewards such as game grants, console grants, and
+			Ship your experiment to get rewards of your choice, such as game grants, console grants, and
 			useful software tools (subject to change).
 		</p>
 		<div class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-3">
@@ -544,7 +663,7 @@
 
 	<section
 		use:reveal
-		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-16 sm:py-20 md:py-28"
+		class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-12 sm:py-14 md:py-16"
 	>
 		<div class="section-divider reveal-item mb-10 sm:mb-12 md:mb-14" style="--reveal-order: 0;" aria-hidden="true">
 			<span class="section-divider__line"></span>
@@ -570,15 +689,16 @@
 						data-faq-trigger="true"
 						id={`faq-${i}-button`}
 						aria-controls={`faq-${i}-panel`}
-						class="faq-item group flex w-full items-center justify-between gap-6 rounded-md px-4 -mx-4 py-6 text-left transition-colors duration-200 hover:bg-dodger/10 active:scale-[0.992]"
+						class="faq-item group flex w-full items-center justify-between gap-6 px-2 py-6 text-left"
 						aria-expanded={openFaq === i}
 					>
-						<span class="text-lg font-medium text-gray-900 transition-colors duration-150 group-hover:text-dodger">
+						<span class="faq-item-label text-lg font-medium text-gray-900 transition-colors duration-200 group-hover:text-dodger">
 							{faq.q}
 						</span>
 						<span
-							class="shrink-0 text-gray-400 transition-all duration-300 group-hover:text-dodger"
-							class:rotate-180={openFaq === i}
+							class="faq-item-icon shrink-0 text-gray-400 transition-all duration-300 group-hover:text-dodger"
+							class:rotate-90={openFaq === i}
+							class:translate-x-0.5={openFaq === i}
 							aria-hidden="true"
 						>
 							<svg
@@ -668,15 +788,335 @@
 
 	.reveal-section {
 		opacity: 0;
-		transform: translateY(14px);
-		transition: opacity 400ms ease, transform 400ms ease;
+		transform: translateY(20px);
+		transition: opacity 560ms ease-out, transform 560ms ease-out;
 	}
 
 	.reveal-item {
 		opacity: 0;
-		transform: translateY(10px);
-		transition: opacity 380ms ease, transform 380ms ease;
-		transition-delay: calc(var(--reveal-order, 0) * 70ms);
+		transform: translateY(20px);
+		transition: opacity 560ms ease-out, transform 560ms ease-out;
+		transition-delay: calc(var(--reveal-order, 0) * 95ms);
+	}
+
+	.micro-interactive {
+		transition: transform 230ms ease, opacity 230ms ease, filter 230ms ease, box-shadow 230ms ease, border-color 230ms ease, color 230ms ease;
+	}
+
+	.micro-interactive:hover,
+	.micro-interactive:focus-visible {
+		transform: translateY(-1px) scale(1.025);
+		opacity: 0.98;
+		filter: brightness(1.03);
+		box-shadow: 0 10px 24px -20px rgba(30, 144, 255, 0.42);
+	}
+
+	.process-title {
+		position: relative;
+	}
+
+	.process-reaction {
+		position: absolute;
+		left: 50%;
+		top: 52%;
+		width: clamp(15rem, 30vw, 22rem);
+		pointer-events: none;
+		transform: translate(-50%, -50%) scale(0.86);
+		opacity: 0;
+		z-index: 0;
+	}
+
+	.process-reaction__svg {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	.process-reaction__svg path {
+		fill: none;
+		stroke: rgba(30, 144, 255, 0.07);
+		stroke-width: 1.1;
+		stroke-linejoin: round;
+	}
+
+	:global(.reveal-section.is-visible) .process-reaction {
+		animation: process-reaction-burst 620ms ease-out 1 both;
+	}
+
+	@keyframes process-reaction-burst {
+		0% {
+			opacity: 0;
+			transform: translate(-50%, -50%) scale(0.86);
+		}
+		20% {
+			opacity: 1;
+			transform: translate(-50%, -50%) scale(1);
+		}
+		100% {
+			opacity: 0;
+			transform: translate(-50%, -50%) scale(1.08);
+		}
+	}
+
+	.cursor-catalyst-layer {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		overflow: hidden;
+		z-index: 0;
+	}
+
+	.cursor-catalyst-triangle {
+		position: absolute;
+		width: 20px;
+		height: 18px;
+		transform: translate(-50%, -50%);
+		opacity: 0;
+		animation: cursor-catalyst-fade var(--catalyst-duration, 600ms) ease-out forwards;
+	}
+
+	.cursor-catalyst-triangle__svg {
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+
+	.cursor-catalyst-triangle__svg path {
+		fill: none;
+		stroke: rgba(30, 144, 255, 0.06);
+		stroke-width: 1.1;
+		stroke-linejoin: round;
+	}
+
+	@keyframes cursor-catalyst-fade {
+		0% {
+			opacity: 0;
+			transform: translate(-50%, -50%) scale(1);
+		}
+		20% {
+			opacity: 1;
+			transform: translate(-50%, -50%) scale(1.02);
+		}
+		100% {
+			opacity: 0;
+			transform: translate(-50%, -50%) scale(var(--catalyst-scale, 1.08));
+		}
+	}
+
+	.process-chip-stack {
+		width: min(100%, 42rem);
+		margin-left: auto;
+		margin-right: auto;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.85rem;
+	}
+
+	.process-chip-row {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		gap: 0.75rem;
+		opacity: 0;
+		transform: translateY(24px);
+	}
+
+	.process-chip-icon {
+		flex: none;
+		width: 0.95rem;
+		height: 0.95rem;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		opacity: var(--icon-opacity, 0.56);
+		transform: rotate(var(--icon-rotate, 0deg)) scale(var(--icon-scale, 1));
+		transform-origin: center;
+		transition: opacity 220ms ease-out, transform 220ms ease-out;
+	}
+
+	.process-chip-icon__svg {
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+
+	.process-chip-icon__svg path {
+		fill: none;
+		stroke: rgba(30, 144, 255, 0.72);
+		stroke-width: 1.4;
+		stroke-linejoin: round;
+	}
+
+	.process-chip-hit {
+		padding: 0;
+		border: 0;
+		background: transparent;
+		display: grid;
+		grid-template-columns: minmax(15rem, 18.5rem) minmax(0, 1fr);
+		align-items: center;
+		justify-content: flex-start;
+		gap: 1.5rem;
+		outline: none;
+		font: inherit;
+		color: inherit;
+		cursor: pointer;
+		width: 100%;
+		text-align: left;
+	}
+
+	.process-chip-pill {
+		display: inline-flex;
+		align-items: center;
+		justify-content: flex-start;
+		min-height: 3rem;
+		padding: 0.72rem 1.3rem;
+		border: 1px solid rgba(148, 163, 184, 0.34);
+		border-radius: 999px;
+		background: rgba(248, 251, 255, 0.66);
+		font-size: 1rem;
+		font-weight: 500;
+		line-height: 1.2;
+		letter-spacing: 0.01em;
+		text-align: left;
+		color: #111827;
+		transition: transform 240ms ease, border-color 240ms ease, background-color 240ms ease, box-shadow 240ms ease;
+		backdrop-filter: blur(4px);
+		transform-origin: left center;
+	}
+
+	.process-chip-explanation {
+		min-width: 0;
+		white-space: nowrap;
+		opacity: 0;
+		transform: translateX(-8px);
+		pointer-events: none;
+		padding-top: 0.1rem;
+		font-size: 0.9rem;
+		line-height: 1.4;
+		letter-spacing: 0.01em;
+		color: #4b5563;
+		transition: opacity 300ms ease-out, transform 300ms ease-out;
+	}
+
+	.process-chip-hit.is-active .process-chip-explanation {
+		opacity: 1;
+		transform: translateX(0);
+	}
+
+	.process-chip-hit:hover .process-chip-pill,
+	.process-chip-hit:focus-visible .process-chip-pill,
+	.process-chip-hit.is-active .process-chip-pill {
+		transform: scale(1.025);
+		border-color: rgba(30, 144, 255, 0.34);
+		background: rgba(248, 251, 255, 0.88);
+		box-shadow: 0 12px 28px -24px rgba(30, 144, 255, 0.38);
+	}
+
+	.process-chip-row.is-active .process-chip-icon,
+	.process-chip-row:hover .process-chip-icon,
+	.process-chip-row:focus-within .process-chip-icon {
+		opacity: clamp(0, calc(var(--icon-opacity, 0.56) + 0.34), 0.98);
+		transform: rotate(var(--icon-rotate, 0deg)) scale(calc(var(--icon-scale, 1) * 1.1));
+	}
+
+	:global(.reveal-section.is-visible) .process-chip-row {
+		animation: process-chip-row-in 560ms ease-out both;
+		animation-delay: calc(var(--chip-order) * 120ms);
+	}
+
+	@keyframes process-chip-row-in {
+		0% {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.challenge-example {
+		position: relative;
+		border: 1px solid transparent;
+		border-radius: 0.6rem;
+		padding: 0.34rem 0.72rem;
+		margin-left: -0.72rem;
+		margin-right: -0.72rem;
+		transition: transform 240ms ease, border-color 240ms ease, box-shadow 240ms ease, opacity 220ms ease;
+	}
+
+	.challenge-example::after {
+		content: '△';
+		position: absolute;
+		right: 0.55rem;
+		top: 50%;
+		transform: translateY(-50%) scale(0.9);
+		font-size: 0.63rem;
+		line-height: 1;
+		color: rgba(30, 144, 255, 0.58);
+		opacity: 0;
+		transition: opacity 220ms ease, transform 220ms ease;
+	}
+
+	.challenge-example:hover {
+		transform: translateY(-2px) scale(1.02);
+		border-color: rgba(30, 144, 255, 0.22);
+		box-shadow: 0 10px 24px -20px rgba(30, 144, 255, 0.45);
+		opacity: 0.98;
+	}
+
+	.challenge-example:hover::after {
+		opacity: 0.78;
+		transform: translateY(-50%) scale(1.05);
+	}
+
+	.faq-item {
+		position: relative;
+		opacity: 0.82;
+		transition: opacity 220ms ease;
+	}
+
+	.faq-item:hover,
+	.faq-item:focus-visible {
+		opacity: 1;
+	}
+
+	.faq-item-label {
+		display: inline-block;
+		transition: transform 220ms ease, opacity 220ms ease;
+	}
+
+	.faq-item-icon {
+		transition: transform 260ms ease, opacity 220ms ease, color 220ms ease;
+	}
+
+	.faq-item:hover .faq-item-label,
+	.faq-item:focus-visible .faq-item-label {
+		transform: translateX(2px);
+	}
+
+	.lab-grid {
+		position: relative;
+		isolation: isolate;
+	}
+
+	@media (max-width: 720px) {
+		.process-chip-hit {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 0.5rem;
+		}
+
+		.process-chip-explanation {
+			white-space: normal;
+			padding-left: 0.25rem;
+			padding-top: 0.75rem;
+		}
+
+		.process-chip-pill {
+			width: 100%;
+		}
 	}
 
 	.lab-marker {
@@ -760,12 +1200,12 @@
 		inset: 0;
 		pointer-events: none;
 		background-image:
-			linear-gradient(to right, rgba(30, 144, 255, 0.04) 1px, transparent 1px),
-			linear-gradient(to bottom, rgba(30, 144, 255, 0.04) 1px, transparent 1px);
+			linear-gradient(to right, rgba(30, 144, 255, 0.085) 1px, transparent 1px),
+			linear-gradient(to bottom, rgba(30, 144, 255, 0.085) 1px, transparent 1px);
 		background-size: 60px 60px;
 		background-position: calc(50% + var(--grid-ox, 0px)) calc(50% + var(--grid-oy, 0px));
 		mask-image: radial-gradient(ellipse 80% 68% at 50% 42%, black 10%, transparent 68%);
-		transition: background-position 600ms ease-out;
+		transition: background-position 320ms ease-out;
 	}
 
 	.hero-grid::after {
@@ -774,12 +1214,27 @@
 		inset: 0;
 		pointer-events: none;
 		background-image:
-			linear-gradient(to right, rgba(30, 144, 255, 0.09) 1px, transparent 1px),
-			linear-gradient(to bottom, rgba(30, 144, 255, 0.09) 1px, transparent 1px);
+			linear-gradient(to right, rgba(30, 144, 255, 0.16) 1px, transparent 1px),
+			linear-gradient(to bottom, rgba(30, 144, 255, 0.16) 1px, transparent 1px);
 		background-size: 60px 60px;
 		background-position: calc(50% + var(--grid-ox, 0px)) calc(50% + var(--grid-oy, 0px));
-		mask-image: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), black 0%, transparent 100%);
-		transition: background-position 600ms ease-out;
+		mask-image: radial-gradient(160px circle at var(--mx, 50%) var(--my, 50%), black 0%, transparent 100%);
+		opacity: calc(0.72 * var(--grid-boost, 1));
+		transition: background-position 320ms ease-out, opacity 280ms ease-out;
+	}
+
+	.hero-catalyst-triangle {
+		position: absolute;
+		left: 50%;
+		top: 46%;
+		width: clamp(14rem, 35vw, 26rem);
+		aspect-ratio: 1 / 0.87;
+		pointer-events: none;
+		transform: translate(-50%, -50%) scale(calc(1 + var(--triangle-energy, 0) * 0.04));
+		clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+		background: rgba(30, 144, 255, calc(0.024 + var(--triangle-energy, 0) * 0.015));
+		opacity: calc(0.56 + var(--triangle-energy, 0) * 0.16);
+		transition: transform 280ms ease-out, opacity 260ms ease-out;
 	}
 
 	.hero-title-reaction {
@@ -904,6 +1359,14 @@
 			scroll-behavior: auto;
 		}
 
+		.micro-interactive,
+		.challenge-example,
+		.faq-item,
+		.faq-item-label {
+			transition: none !important;
+			animation: none !important;
+		}
+
 		.reveal-section {
 			opacity: 1;
 			transform: none;
@@ -924,10 +1387,55 @@
 			display: none;
 		}
 
+		.process-reaction {
+			display: none;
+		}
+
+		.cursor-catalyst-layer {
+			display: none;
+		}
+
+		.process-chip-row {
+			opacity: 1;
+			transform: none;
+			animation: none !important;
+		}
+
+		.process-chip-pill {
+			transform: none !important;
+			transition: none;
+		}
+
+		.process-chip-explanation {
+			opacity: 1;
+			transform: none;
+			transition: none;
+		}
+
+		.process-chip-icon {
+			opacity: 0.58;
+			transform: rotate(var(--icon-rotate, 0deg)) scale(var(--icon-scale, 1));
+			animation: none !important;
+		}
+
 		.section-divider__triangle {
 			opacity: 1;
 			transform: none;
 			animation: none !important;
+		}
+
+		.challenge-example::after {
+			opacity: 0.62;
+			transform: translateY(-50%) scale(1);
+		}
+
+		.hero-grid::after {
+			opacity: 0;
+		}
+
+		.hero-catalyst-triangle {
+			opacity: 0.54;
+			transform: translate(-50%, -50%) scale(1);
 		}
 	}
 
@@ -960,6 +1468,70 @@
 
 	:global(html[data-theme='dark'] .hero-title-reaction__svg path) {
 		stroke: rgba(147, 197, 253, 0.1);
+	}
+
+	:global(html[data-theme='dark'] .process-reaction__svg path) {
+		stroke: rgba(147, 197, 253, 0.08);
+	}
+
+	:global(html[data-theme='dark'] .cursor-catalyst-triangle__svg path) {
+		stroke: rgba(147, 197, 253, 0.07);
+	}
+
+	:global(html[data-theme='dark'] .process-chip-pill) {
+		background: rgba(15, 23, 42, 0.56);
+		border-color: rgba(59, 130, 246, 0.32);
+		color: #e5e7eb;
+		box-shadow: inset 0 0 0 1px rgba(30, 144, 255, 0.08);
+	}
+
+	:global(html[data-theme='dark'] .process-chip-hit:hover .process-chip-pill),
+	:global(html[data-theme='dark'] .process-chip-hit:focus-visible .process-chip-pill) {
+		background: rgba(15, 23, 42, 0.8);
+		border-color: rgba(96, 165, 250, 0.42);
+	}
+
+	:global(html[data-theme='dark'] .process-chip-hit.is-active .process-chip-pill) {
+		background: rgba(15, 23, 42, 0.8);
+		border-color: rgba(96, 165, 250, 0.42);
+	}
+
+	:global(html[data-theme='dark'] .process-chip-icon__svg path) {
+		stroke: rgba(147, 197, 253, 0.76);
+	}
+
+	:global(html[data-theme='dark'] .process-chip-explanation) {
+		color: #d1d9e6;
+	}
+
+	:global(html[data-theme='dark'] .challenge-example) {
+		border-color: transparent;
+	}
+
+	:global(html[data-theme='dark'] .challenge-example:hover) {
+		border-color: rgba(96, 165, 250, 0.28);
+		box-shadow: 0 10px 24px -20px rgba(96, 165, 250, 0.45);
+	}
+
+	:global(html[data-theme='dark'] .challenge-example::after) {
+		color: rgba(147, 197, 253, 0.76);
+	}
+
+	:global(html[data-theme='dark'] .hero-grid::before) {
+		background-image:
+			linear-gradient(to right, rgba(147, 197, 253, 0.125) 1px, transparent 1px),
+			linear-gradient(to bottom, rgba(147, 197, 253, 0.125) 1px, transparent 1px);
+	}
+
+	:global(html[data-theme='dark'] .hero-grid::after) {
+		background-image:
+			linear-gradient(to right, rgba(147, 197, 253, 0.2) 1px, transparent 1px),
+			linear-gradient(to bottom, rgba(147, 197, 253, 0.2) 1px, transparent 1px);
+		opacity: calc(0.72 * var(--grid-boost, 1));
+	}
+
+	:global(html[data-theme='dark'] .hero-catalyst-triangle) {
+		background: rgba(147, 197, 253, calc(0.03 + var(--triangle-energy, 0) * 0.014));
 	}
 
 	:global(html[data-theme='dark'] .text-gray-900) {
