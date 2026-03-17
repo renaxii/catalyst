@@ -1,0 +1,104 @@
+<script>
+	let { isDark, toggleTheme } = $props();
+
+	let mobileMenuOpen = $state(false);
+
+	function toggleMobileMenu() {
+		mobileMenuOpen = !mobileMenuOpen;
+	}
+
+	function closeMobileMenu() {
+		mobileMenuOpen = false;
+	}
+</script>
+
+<nav class="fixed inset-x-0 top-0 z-50 border-b border-gray-100 bg-white/90 backdrop-blur-sm">
+	<a
+		href="#page-top"
+		aria-label="Back to hero section"
+		class="micro-interactive absolute left-2 top-1/2 -translate-y-1/2 font-heading text-lg font-bold tracking-tight text-gray-900 no-underline hover:text-gray-900 sm:left-3 md:left-4"
+	>
+		Catalyst
+	</a>
+	<div class="mx-auto flex w-full max-w-5xl items-center justify-end px-4 py-4 sm:px-6">
+		<div class="hidden items-center gap-7 md:flex md:gap-9">
+			<ul class="hidden items-center gap-8 md:flex">
+				{#each [['#challenge', 'Challenge'], ['#process', 'Process'], ['#prizes', 'Prizes'], ['#faq', 'FAQ']] as [href, label]}
+					<li>
+						<a
+							{href}
+							class="micro-interactive group relative inline-block -translate-y-0 text-sm font-medium text-gray-500 transition-all duration-200 hover:-translate-y-0.5 hover:text-dodger"
+						>
+							{label}
+							<span
+								class="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-dodger transition-transform duration-300 ease-out group-hover:scale-x-100"
+							></span>
+						</a>
+					</li>
+				{/each}
+			</ul>
+			<button
+				type="button"
+				onclick={toggleTheme}
+				class={`micro-interactive inline-flex h-8 w-[5.35rem] items-center justify-center rounded-full border px-3 text-xs font-semibold uppercase tracking-wider transition-all duration-200 ${
+					isDark
+						? 'border-dodger/40 bg-dodger/15 text-dodger'
+						: 'border-gray-200 bg-white text-gray-600 hover:border-dodger/40 hover:text-dodger'
+				}`}
+			>
+				{isDark ? 'Light' : 'Dark'}
+			</button>
+		</div>
+		<div class="flex items-center gap-3 md:hidden">
+			<button
+				type="button"
+				onclick={toggleTheme}
+				aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+				class={`micro-interactive inline-flex h-10 w-[5.35rem] items-center justify-center rounded-full border px-3 text-xs font-semibold uppercase tracking-wider transition-all duration-200 ${
+					isDark
+						? 'border-dodger/40 bg-dodger/15 text-dodger'
+						: 'border-gray-200 bg-white text-gray-600 hover:border-dodger/40 hover:text-dodger'
+				}`}
+			>
+				{isDark ? 'Light' : 'Dark'}
+			</button>
+			<button
+				type="button"
+				onclick={toggleMobileMenu}
+				aria-expanded={mobileMenuOpen}
+				aria-controls="mobile-nav-menu"
+				aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+				class="micro-interactive inline-flex h-10 w-10 items-center justify-center rounded-md border border-gray-200 text-gray-600 transition-colors duration-200 hover:border-dodger/40 hover:text-dodger"
+			>
+				<svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+					{#if mobileMenuOpen}
+						<path d="M4 4L12 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+						<path d="M12 4L4 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+					{:else}
+						<path d="M2.5 4H13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+						<path d="M2.5 8H13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+						<path d="M2.5 12H13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+					{/if}
+				</svg>
+			</button>
+		</div>
+	</div>
+	<div
+		id="mobile-nav-menu"
+		class={`overflow-hidden border-t border-gray-200 bg-white transition-all duration-300 md:hidden ${mobileMenuOpen ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'}`}
+	>
+		<ul class="space-y-1 px-4 py-3 sm:px-6">
+			{#each [['#challenge', 'Challenge'], ['#process', 'Process'], ['#prizes', 'Prizes'], ['#faq', 'FAQ']] as [href, label]}
+				<li>
+					<a
+						{href}
+						onclick={closeMobileMenu}
+						class="micro-interactive block rounded-md px-3 py-2.5 text-sm font-medium text-gray-600 transition-colors duration-200 hover:text-dodger"
+					>
+						{label}
+					</a>
+				</li>
+			{/each}
+		</ul>
+	</div>
+</nav>
