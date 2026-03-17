@@ -120,7 +120,7 @@
 	bind:this={heroSectionEl}
 	role="banner"
 	onmousemove={handleHeroMouseMove}
-	class="hero-grid relative mx-auto flex min-h-[calc(100svh-4.5rem)] w-full max-w-5xl flex-col items-center justify-center pb-16 text-center sm:pb-20 md:pb-28"
+	class="hero-grid relative mx-auto flex min-h-[calc(100svh-var(--nav-height))] w-full max-w-5xl flex-col items-center justify-center pb-16 text-center sm:pb-20 md:pb-28"
 	style="--grid-ox: {((heroMouseX - 50) * 0.1).toFixed(2)}px; --grid-oy: {((heroMouseY - 50) * 0.1).toFixed(2)}px; --mx: {heroMouseX.toFixed(1)}%; --my: {heroMouseY.toFixed(1)}%; --triangle-energy: {heroTriangleEnergy.toFixed(3)}; --grid-boost: {prefersReducedMotion ? '0' : '1'};"
 >
 	{#if cursorCatalysts.length}
@@ -187,6 +187,11 @@
 </section>
 
 <style>
+	.hero-grid {
+		/* Prefer dynamic viewport on modern browsers; svh class remains as fallback. */
+		min-height: calc(100dvh - var(--nav-height));
+	}
+
 	.hero-grid::before {
 		content: '';
 		position: absolute;

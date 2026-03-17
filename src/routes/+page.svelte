@@ -68,7 +68,7 @@
 	/>
 </a>
 
-<main class="lab-grid overflow-x-hidden px-6 pt-24 pb-16 md:pt-28 md:pb-20">
+<main class="lab-grid overflow-x-hidden px-4 pb-16 pt-[calc(var(--nav-height)+2rem)] sm:px-6 md:pb-20 md:pt-[calc(var(--nav-height)+3rem)]">
 	<Hero {prefersReducedMotion} onVisibilityChange={(v) => (showTopFlag = v)} />
 	<Challenge />
 	<Process />

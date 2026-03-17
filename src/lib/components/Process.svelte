@@ -223,6 +223,7 @@
 		color: inherit;
 		cursor: pointer;
 		width: 100%;
+		min-width: 0;
 		text-align: left;
 	}
 
@@ -241,6 +242,7 @@
 		letter-spacing: 0.01em;
 		text-align: left;
 		color: #111827;
+		max-width: 100%;
 		transition: transform 240ms ease, border-color 240ms ease, background-color 240ms ease, box-shadow 240ms ease;
 		backdrop-filter: blur(4px);
 		transform-origin: left center;
@@ -322,6 +324,7 @@
 			width: 100%;
 			min-height: 2.7rem;
 			padding: 0.6rem 1.05rem;
+			font-size: 0.95rem;
 		}
 	}
 

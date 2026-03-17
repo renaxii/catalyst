@@ -20,7 +20,7 @@
 	>
 		Catalyst
 	</a>
-	<div class="mx-auto flex h-16 w-full max-w-5xl items-center justify-end px-4 sm:px-6">
+	<div class="mx-auto flex h-[var(--nav-height)] w-full max-w-5xl items-center justify-end px-4 sm:px-6">
 		<div class="hidden items-center gap-7 md:flex md:gap-9">
 			<ul class="hidden items-center gap-8 md:flex">
 				{#each [['#challenge', 'Challenge'], ['#process', 'Process'], ['#prizes', 'Prizes'], ['#faq', 'FAQ']] as [href, label]}
@@ -40,7 +40,7 @@
 			<button
 				type="button"
 				onclick={toggleTheme}
-				class={`micro-interactive inline-flex h-8 w-[5.35rem] items-center justify-center rounded-full border px-3 text-xs font-semibold uppercase tracking-wider transition-all duration-200 ${
+				class={`micro-interactive inline-flex h-8 w-20 items-center justify-center rounded-full border px-2.5 text-xs font-semibold uppercase tracking-wider transition-all duration-200 sm:w-[5.35rem] sm:px-3 ${
 					isDark
 						? 'border-dodger/40 bg-dodger/15 text-dodger'
 						: 'border-gray-200 bg-white text-gray-600 hover:border-dodger/40 hover:text-dodger'
@@ -54,7 +54,7 @@
 				type="button"
 				onclick={toggleTheme}
 				aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-				class={`micro-interactive inline-flex h-10 w-[5.35rem] items-center justify-center rounded-full border px-3 text-xs font-semibold uppercase tracking-wider transition-all duration-200 ${
+				class={`micro-interactive inline-flex h-10 w-20 items-center justify-center rounded-full border px-2.5 text-xs font-semibold uppercase tracking-wider transition-all duration-200 sm:w-[5.35rem] sm:px-3 ${
 					isDark
 						? 'border-dodger/40 bg-dodger/15 text-dodger'
 						: 'border-gray-200 bg-white text-gray-600 hover:border-dodger/40 hover:text-dodger'

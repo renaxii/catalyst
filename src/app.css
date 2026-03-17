@@ -18,6 +18,7 @@
 :root {
 	--accent-blue: #1e90ff;
 	--gallery-card-bg: rgba(255, 255, 255, 0.76);
+	--nav-height: 4rem;
 }
 
 /* ── scrollbar ── */
