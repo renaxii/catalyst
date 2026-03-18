@@ -1,7 +1,6 @@
 <script>
 	import { reveal } from '$lib/actions.js';
 
-	// icon values are purely decorative — tweak freely
 	const processSteps = [
 		{
 			title: 'start with something familiar',
@@ -88,10 +87,10 @@
 				<path d="M200 30 L365 320 L35 320 Z" />
 			</svg>
 		</span>
-		Here's an outline of the process:
+		Here's how it works:
 	</h2>
 	<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 2;">
-		Like a reaction chain, each stage transforms the idea and passes momentum to the next.
+		Take an idea and build on it, step by step.
 	</p>
 	<div class="process-chip-stack mt-10" aria-label="Catalyst process steps">
 		{#each processSteps as step, index}
