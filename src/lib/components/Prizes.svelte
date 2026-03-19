@@ -48,7 +48,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-3.5 md:mt-4 md:gap-4">
+	<div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-3.5 md:mt-5 md:gap-4">
 		<div class="reveal-item prize-card lab-entry rounded-lg border border-gray-200 bg-white overflow-hidden" style="--reveal-order: 3;">
 			<div class="prize-card-img-wrap h-24 overflow-hidden bg-gray-100 md:h-28">
 				<img

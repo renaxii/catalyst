@@ -182,7 +182,6 @@
 		in:fade={{ duration: 520, delay: 440 }}
 		class="absolute bottom-12 left-1/2 -translate-x-1/2 text-xs uppercase tracking-[0.18em] text-gray-400 md:bottom-16"
 	>
-		<div class="[animation:bounce_2s_ease-in-out_infinite]">scroll ↓</div>
 	</div>
 </section>
 

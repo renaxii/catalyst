@@ -2,7 +2,6 @@
 	import { slide } from 'svelte/transition';
 	import { reveal } from '$lib/actions.js';
 
-	// keep these in sync with the actual rules doc once it's finalized
 	const faqs = [
 		{
 			q: 'What is a YSWS?',
@@ -24,10 +23,6 @@
 			q: 'Can I work with other people?',
 			a: "Absolutely! Collaborating with others is encouraged. You can form teams of up to 3 people and work together on your projects. However, each person's contributions should be tracked seperately."
 		},
-		{
-			q: 'When will Catalyst launch?',
-			a: 'Catalyst is currently in development. Possibly launching mid to late 2026.'
-		}
 	];
 
 	let openFaq = $state(null);
@@ -36,7 +31,6 @@
 		openFaq = openFaq === i ? null : i;
 	}
 
-	// arrow key nav between FAQ items (WAI-ARIA accordion pattern)
 	function handleFaqKeydown(event, i, total) {
 		if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
 
