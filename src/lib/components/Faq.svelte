@@ -5,11 +5,11 @@
 	const faqs = [
 		{
 			q: 'What is a YSWS?',
-			a: 'YSWS stands for You Ship, We Ship. Complete your project and share it with the world (publish it on itch.io, Vercel, or another platform), and receive rewards for your work.'
+			a: 'YSWS stands for You Ship, We Ship. Complete your project and share it with the world (publish it on <a href="https://itch.io/" target="_blank" rel="noreferrer">itch.io</a>, <a href="https://vercel.com/" target="_blank" rel="noreferrer">Vercel</a>, or another platform), and receive rewards for your work.'
 		},
 		{
 			q: 'How much does it cost?',
-			a: 'Everything is completely free!'
+			a: 'Everything is completely free! This is possible because of the generous support of Hack Club sponsors.'
 		},
 		{
 			q: 'Who can participate?',
@@ -23,9 +23,9 @@
 			q: 'Can I work with other people?',
 			a: "Absolutely! Collaborating with others is encouraged. You can form teams of up to 3 people and work together on your projects. However, each person's contributions should be tracked seperately."
 		},
-        {
+		{
 			q: 'Can I use AI?',
-			a: "AI is heavily discouraged, and usage in code is limited to up to 30%. AI art is not allowed."
+			a: "AI is heavily discouraged, but usage in code is limited to 30%. AI-generated art is not allowed."
 		},
 	];
 
@@ -106,7 +106,7 @@
 						class="px-4 pt-3 pb-8 text-base leading-relaxed text-gray-600"
 					>
 						<div class="ml-2 border-l border-dodger/30 pl-4 pr-1 pb-1">
-							{faq.a}
+							{@html faq.a}
 						</div>
 					</div>
 				{/if}
@@ -143,6 +143,16 @@
 
 	:global(html[data-theme='dark'] .faq-item:hover) {
 		background-color: rgba(30, 144, 255, 0.08) !important;
+	}
+
+	:global(#faq a) {
+		color: #1e90ff;
+		text-decoration: underline;
+		text-underline-offset: 2px;
+	}
+
+	:global(html[data-theme='dark'] #faq a) {
+		color: #93c5fd;
 	}
 
 	@media (prefers-reduced-motion: reduce) {
