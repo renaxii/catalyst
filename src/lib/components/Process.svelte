@@ -90,7 +90,7 @@
 		Here's how it works:
 	</h2>
 	<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 2;">
-		Take an idea and build on it, step by step.
+		Take an idea and build on it.
 	</p>
 	<div class="process-chip-stack mt-10" aria-label="Catalyst process steps">
 		{#each processSteps as step, index}

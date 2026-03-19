@@ -34,7 +34,7 @@
 		<li class="challenge-example reveal-item" style="--reveal-order: 6;">Calendar → survival sim</li>
 	</ul>
 	<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 7;">
-		The more unexpected the transformation, the better.
+		The more unexpected the transformation, the better!
 	</p>
 </section>
 

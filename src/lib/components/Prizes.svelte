@@ -1,12 +1,60 @@
 <script>
 	import { reveal } from '$lib/actions.js';
+	const stages = [
+		{
+			label: 'participate',
+			description: 'show up and stay consistent',
+			prizes: [
+				{ item: 'stickers' },
+				{ item: 'caffeine grant', result: 'unfocused → focused' },
+				{ item: 'reusable smart notebook', result: 'notes can be erased and rewritten' }
+			]
+		},
+		{
+			label: 'build',
+			description: 'iterate on your ideas',
+			prizes: [
+				{ item: 'nfc tags', result: 'programmable to change phone interface' },
+				{ item: 'macropad', result: 'can be customized to perform (an) action(s)' },
+				{ item: 'camera', result: 'intangible code on phone → physical output' }
+			]
+		},
+		{
+			label: 'ship',
+			description: 'make it real',
+			prizes: [
+				{
+					item: 'framework 12 laptop grant',
+					result: 'upgradable',
+					image: 'https://images.prismic.io/frameworkmarketplace/Z7yh2p7c43Q3gJei_FW12-Blog-Hero.png?auto=format,compress',
+					imageAlt: 'framework laptop'
+				},
+				{
+					item: '3d printer (bambu lab a1 mini) grant',
+					result: 'filament → something physical',
+					image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiI4qZOwRyMtlKSZrSRszBmD4BxfO_c6gWyA&s',
+					imageAlt: 'bambu lab a1 mini'
+				},
+				{
+					item: 'vr headset grant',
+					result: 'physical space → digital world',
+					image: 'https://dgschool.lv/wp-content/uploads/2024/07/feature2.jpg',
+					imageAlt: 'vr headset'
+				}
+			]
+		}
+	];
+
+	function stageOrder(index) {
+		return 2.1 + index * 1.25;
+	}
 </script>
 
 <section
 	use:reveal
-	class="prizes-section reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-8 sm:py-9 md:py-10"
+	class="prizes-section reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-6 sm:py-7 md:py-8"
 >
-	<div class="section-divider reveal-item mb-6 sm:mb-7 md:mb-8" style="--reveal-order: 0;" aria-hidden="true">
+	<div class="section-divider reveal-item mb-5 sm:mb-6 md:mb-7" style="--reveal-order: 0;" aria-hidden="true">
 		<span class="section-divider__line"></span>
 		<span class="section-divider__triangle">▽̶</span>
 		<span class="section-divider__line"></span>
@@ -16,200 +64,205 @@
 		class="reveal-item lab-marker scroll-mt-24 font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
 		style="--reveal-order: 0;"
 	>
-		[ REWARDS ]
+		[ PRIZES ]
 	</p>
-	<div class="prizes-header mt-3 md:mt-4">
-		<div class="prizes-copy">
-			<h2 class="reveal-item font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-5xl" style="--reveal-order: 1;">
-				Win epic prizes!
-			</h2>
-			<p class="reveal-item mt-3 text-sm leading-relaxed text-gray-600 md:text-base" style="--reveal-order: 2;">
-				Ship your experiment to earn shards, then use shards to get rewards of your choice, such as game grants, console grants, and
-				useful software tools (subject to change).
-			</p>
-		</div>
-		<div class="shards-card reveal-item" style="--reveal-order: 2.2;">
-			<p class="font-mono text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-gray-500">
-				how to earn shards
-			</p>
-			<div class="shard-pairs mt-2.5">
-				<div class="shard-pair" style="--pair-order: 0;">
-					<p class="shard-action">ship something playable</p>
-					<p class="shard-outcome">→ bigger rewards for stronger ideas</p>
+	<h2 class="reveal-item mt-3 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-5xl" style="--reveal-order: 1;">
+		Win epic prizes!
+	</h2>
+
+	<div class="stages mt-4 sm:mt-5">
+		{#each stages as stage, stageIndex}
+			<section class="stage reveal-item" style={`--reveal-order: ${stageOrder(stageIndex)};`}>
+				<div class="stage-head">
+					<p class="stage-label">{stage.label}</p>
+					<p class="stage-description">{stage.description}</p>
 				</div>
-				<div class="shard-pair" style="--pair-order: 1;">
-					<p class="shard-action">document your process</p>
-					<p class="shard-outcome">→ smaller, consistent rewards</p>
+				<div class="stage-grid" aria-label={`${stage.label} prizes`}>
+					{#each stage.prizes as prize}
+						<article class={`stage-card ${prize.image ? 'is-image' : ''}`}>
+							{#if prize.image}
+								<div class="stage-card-image-wrap">
+									<img src={prize.image} alt={prize.imageAlt} class="stage-card-image" loading="lazy" />
+								</div>
+							{/if}
+							<p class="stage-card-item">{prize.item}</p>
+							{#if prize.result}
+								<p class="stage-card-result">{prize.result}</p>
+							{/if}
+						</article>
+					{/each}
 				</div>
-				<div class="shard-pair" style="--pair-order: 2;">
-					<p class="shard-action">keep experimenting</p>
-					<p class="shard-outcome">→ bonus over time</p>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-3.5 md:mt-5 md:gap-4">
-		<div class="reveal-item prize-card lab-entry rounded-lg border border-gray-200 bg-white overflow-hidden" style="--reveal-order: 3;">
-			<div class="prize-card-img-wrap h-24 overflow-hidden bg-gray-100 md:h-28">
-				<img
-					src="https://cdn.fastly.steamstatic.com/store/home/store_home_share.jpg"
-					alt="Steam storefront"
-					class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-					loading="lazy"
-				/>
-			</div>
-			<div class="p-3 sm:p-3.5">
-				<p class="font-mono text-[0.67rem] font-semibold uppercase tracking-[0.18em] text-dodger">Game Grants</p>
-				<p class="mt-1 text-xs leading-relaxed text-gray-600 sm:text-sm">Win Steam, Nintendo, or other game grants to inspire your next experiment.</p>
-			</div>
-		</div>
-		<div class="reveal-item prize-card lab-entry rounded-lg border border-gray-200 bg-white overflow-hidden" style="--reveal-order: 4;">
-			<div class="prize-card-img-wrap h-24 overflow-hidden bg-gray-100 md:h-28">
-				<img
-					src="https://assets.nintendo.com/image/upload/q_auto/f_auto/c_fill,w_1200/ncom/en_US/articles/2025/nintendo-switch-2-to-be-released-in-2025/1920x1080_WN_PR01162025"
-					alt="Nintendo Switch 2"
-					class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-					loading="lazy"
-				/>
-			</div>
-			<div class="p-3 sm:p-3.5">
-				<p class="font-mono text-[0.67rem] font-semibold uppercase tracking-[0.18em] text-dodger">Console Grants</p>
-				<p class="mt-1 text-xs leading-relaxed text-gray-600 sm:text-sm">Nintendo Switch or similar console rewards for shipping a great project.</p>
-			</div>
-		</div>
-		<div class="reveal-item prize-card lab-entry rounded-lg border border-gray-200 bg-white overflow-hidden" style="--reveal-order: 5;">
-			<div class="prize-card-img-wrap h-24 overflow-hidden bg-gray-100 md:h-28">
-				<img
-					src="https://cdn.prod.website-files.com/6640f16222f995bdbeda98c8/6764328deb4eec9c082baebf_adobe%20creative%20cloud%20apps%20-%20Copy.png"
-					alt="Adobe Creative Cloud apps"
-					class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-					loading="lazy"
-				/>
-			</div>
-			<div class="p-3 sm:p-3.5">
-				<p class="font-mono text-[0.67rem] font-semibold uppercase tracking-[0.18em] text-dodger">Software Licenses</p>
-				<p class="mt-1 text-xs leading-relaxed text-gray-600 sm:text-sm">Professional tools for development and design to level up your workflow.</p>
-			</div>
-		</div>
+			</section>
+		{/each}
 	</div>
 </section>
 
 <style>
-	.prizes-header {
-		display: block;
-		gap: 1rem;
-	}
-
-	.prizes-copy {
-		min-width: 0;
-	}
-
-	.shards-card {
-		padding: 1rem 1.1rem;
-		border-radius: 14px;
-		background: rgba(248, 251, 255, 0.72);
-		border: 1px solid rgba(148, 163, 184, 0.24);
-		opacity: 0;
-		transform: translateY(10px);
-	}
-
-	:global(.reveal-section.is-visible) .shards-card {
-		animation: shards-card-in 460ms ease-out both;
-	}
-
-	@keyframes shards-card-in {
-		0% {
-			opacity: 0;
-			transform: translateY(10px);
-		}
-		100% {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
-
-	@media (min-width: 900px) {
-		.prizes-header {
-			display: grid;
-			grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-			gap: clamp(1.5rem, 3vw, 2.25rem);
-			align-items: start;
-		}
-	}
-
-	.shard-pairs {
+	.stages {
 		display: flex;
 		flex-direction: column;
-		gap: 0.74rem;
+		gap: 0.85rem;
 	}
 
-	.shard-pair {
-		opacity: 1;
-		transform: none;
+	.stage {
+		display: flex;
+		flex-direction: column;
+		gap: 0.64rem;
 	}
 
-	.shard-action {
+	.stage-head {
+		display: flex;
+		align-items: baseline;
+		gap: 0.45rem;
+		flex-wrap: wrap;
+	}
+
+	.stage-label {
 		margin: 0;
-		font-size: 0.9rem;
-		line-height: 1.4;
+		font-size: clamp(0.95rem, 0.35vw + 0.86rem, 1.08rem);
+		font-weight: 500;
+		line-height: 1.2;
+		color: #111827;
+		text-transform: lowercase;
+	}
+
+	.stage-description {
+		margin: 0;
+		font-size: clamp(0.84rem, 0.22vw + 0.78rem, 0.94rem);
+		line-height: 1.2;
+		color: rgba(75, 85, 99, 0.82);
+		text-transform: lowercase;
+	}
+
+	.stage-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 0.56rem;
+	}
+
+	@media (min-width: 660px) {
+		.stage-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 0.58rem;
+		}
+	}
+
+	@media (min-width: 920px) {
+		.stage-grid {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+	}
+
+	.stage-card {
+		border-radius: 11px;
+		padding: 0.62rem 0.74rem;
+		border: 1px solid rgba(148, 163, 184, 0.28);
+		background: rgba(248, 251, 255, 0.62);
+		transition: transform 180ms ease-out, border-color 180ms ease-out, background-color 180ms ease-out;
+	}
+
+	.stage-card:hover {
+		transform: translateY(-2px);
+		border-color: rgba(30, 144, 255, 0.36);
+	}
+
+	.stage-card-item {
+		margin: 0;
+		font-size: clamp(0.88rem, 0.25vw + 0.8rem, 0.98rem);
+		line-height: 1.25;
 		font-weight: 400;
 		color: #4b5563;
+		text-transform: lowercase;
 	}
 
-	.shard-outcome {
-		margin: 0.08rem 0 0;
-		font-size: 0.82rem;
-		line-height: 1.35;
+	.stage-card-result {
+		margin: 0.14rem 0 0;
+		font-size: clamp(0.78rem, 0.2vw + 0.72rem, 0.88rem);
+		line-height: 1.2;
 		font-weight: 400;
 		color: rgba(75, 85, 99, 0.78);
+		letter-spacing: 0.03em;
+		text-transform: lowercase;
+		transition: color 180ms ease-out;
 	}
 
-	:global(html[data-theme='dark'] .prize-card) {
-		background-color: rgba(15, 23, 42, 0.6) !important;
-		border-color: rgba(148, 163, 184, 0.3) !important;
+	.stage-card:hover .stage-card-result {
+		color: rgba(75, 85, 99, 0.95);
 	}
 
-	:global(html[data-theme='dark'] .prize-card-img-wrap) {
-		background-color: rgba(15, 23, 42, 0.8) !important;
+	.stage-card-image-wrap {
+		width: 100%;
+		height: 4rem;
+		margin-bottom: 0.45rem;
+		border-radius: 8px;
+		overflow: hidden;
+		background: transparent;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
-	:global(html[data-theme='dark'] .shard-action) {
+	.stage-card-image {
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		transition: transform 220ms ease-out;
+	}
+
+	.stage-card.is-image {
+		padding-top: 0.52rem;
+	}
+
+	.stage-card.is-image:hover .stage-card-image {
+		transform: scale(1.02);
+	}
+
+
+	:global(html[data-theme='dark'] .stage-label) {
+		color: #e5e7eb;
+	}
+
+	:global(html[data-theme='dark'] .stage-description) {
+		color: rgba(209, 217, 230, 0.8);
+	}
+
+	:global(html[data-theme='dark'] .stage-card-item) {
 		color: #d1d9e6;
 	}
 
-	:global(html[data-theme='dark'] .shard-outcome) {
+	:global(html[data-theme='dark'] .stage-card-result) {
 		color: rgba(209, 217, 230, 0.78);
 	}
 
-	:global(html[data-theme='dark'] .shards-card) {
+	:global(html[data-theme='dark'] .stage-card) {
 		background: rgba(15, 23, 42, 0.5);
 		border-color: rgba(148, 163, 184, 0.28);
 	}
 
+	:global(html[data-theme='dark'] .stage-card:hover) {
+		border-color: rgba(96, 165, 250, 0.46);
+	}
+
+	:global(html[data-theme='dark'] .stage-card:hover .stage-card-result) {
+		color: rgba(209, 217, 230, 0.95);
+	}
+
 	@media (max-width: 640px) {
 		.prizes-section {
-			padding-top: 1.6rem;
-			padding-bottom: 1.7rem;
+			padding-top: 1.4rem;
+			padding-bottom: 1.55rem;
 		}
 
-		.prizes-header {
-			gap: 1rem;
+		.stages {
+			gap: 0.78rem;
 		}
 
-		.shards-card {
-			padding: 0.9rem 1rem;
+		.stage-card-image-wrap {
+			height: 3.55rem;
 		}
 
-		.shard-pairs {
-			gap: 0.68rem;
-		}
-
-		.shard-action {
-			font-size: 0.88rem;
-		}
-
-		.shard-outcome {
-			font-size: 0.8rem;
+		.stage {
+			gap: 0.58rem;
 		}
 	}
 </style>
