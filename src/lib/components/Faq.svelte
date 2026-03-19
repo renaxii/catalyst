@@ -5,7 +5,7 @@
 	const faqs = [
 		{
 			q: 'What is a YSWS?',
-			a: 'YSWS stands for You Ship, We Ship. Complete your project and share it with the world, and receive rewards for your work.'
+			a: 'YSWS stands for You Ship, We Ship. Complete your project and share it with the world (publish it on itch.io, Vercel, or another platform), and receive rewards for your work.'
 		},
 		{
 			q: 'How much does it cost?',
@@ -22,6 +22,10 @@
 		{
 			q: 'Can I work with other people?',
 			a: "Absolutely! Collaborating with others is encouraged. You can form teams of up to 3 people and work together on your projects. However, each person's contributions should be tracked seperately."
+		},
+        {
+			q: 'Can I use AI?',
+			a: "AI is heavily discouraged, and usage in code is limited to up to 30%. AI art is not allowed."
 		},
 	];
 
