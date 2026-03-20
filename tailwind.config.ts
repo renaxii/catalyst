@@ -6,7 +6,9 @@ const config: Config = {
     extend: {
       colors: {
         "accent-blue": "#1e90ff",
-        "gallery-card-bg": "rgba(255, 255, 255, 0.76)"
+        "gallery-card-bg": "rgba(255, 255, 255, 0.76)",
+        dodger: "#1e90ff",
+        "lab-note": "rgba(255, 255, 255, 0.76)"
       },
       fontFamily: {
         heading: ['Outfit', 'sans-serif'],
