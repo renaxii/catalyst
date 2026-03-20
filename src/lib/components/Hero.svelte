@@ -77,7 +77,6 @@
 	});
 
 	onMount(() => {
-		// lower factor = smoother/laggier trail
 		const animate = () => {
 			const factor = prefersReducedMotion ? 0.22 : 0.14;
 			heroMouseX += (heroTargetMouseX - heroMouseX) * factor;

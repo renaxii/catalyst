@@ -1,4 +1,3 @@
-// use:reveal — fires once when the element enters the viewport
 export function reveal(node) {
 	if (typeof IntersectionObserver === 'undefined') {
 		node.classList.add('is-visible');

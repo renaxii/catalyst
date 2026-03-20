@@ -5,14 +5,8 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        cream: "#F7E9DC",
-        peach: "#E8A87C",
-        mint: "#C4E0DE",
-        lavender: "#D8BFD8",
-        butter: "#F6D365",
-        ink: "#3A3A3A",
-        dodger: "#1E90FF",
-        "lab-note": "#F8FBFF"
+        "accent-blue": "#1e90ff",
+        "gallery-card-bg": "rgba(255, 255, 255, 0.76)"
       },
       fontFamily: {
         heading: ['Outfit', 'sans-serif'],

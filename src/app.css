@@ -14,14 +14,12 @@
 	}
 }
 
-/* ── accent vars ── */
 :root {
 	--accent-blue: #1e90ff;
 	--gallery-card-bg: rgba(255, 255, 255, 0.76);
 	--nav-height: 4rem;
 }
 
-/* ── scrollbar ── */
 * {
 	box-sizing: border-box;
 	scrollbar-width: thin;
@@ -33,7 +31,6 @@
 ::-webkit-scrollbar-thumb { background: var(--accent-blue); border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: #3a82ff; }
 
-/* ── focus ring ── */
 a, button { outline: none; }
 
 a:focus-visible,
@@ -42,12 +39,10 @@ button:focus-visible {
 	border-radius: 0.45rem;
 }
 
-/* smooth transitions when toggling dark/light */
 html, body, nav, main, section, footer {
 	transition: background-color 340ms ease, color 340ms ease, border-color 340ms ease;
 }
 
-/* ── reveal entrance animations ── */
 .reveal-section {
 	opacity: 0;
 	transform: translateY(20px);
@@ -71,7 +66,6 @@ html, body, nav, main, section, footer {
 	transform: translateY(0);
 }
 
-/* ── micro-interactions (nav links, RSVP button, etc.) ── */
 .micro-interactive {
 	transition: transform 230ms ease, opacity 230ms ease, filter 230ms ease, box-shadow 230ms ease, border-color 230ms ease, color 230ms ease;
 }
@@ -84,7 +78,6 @@ html, body, nav, main, section, footer {
 	box-shadow: 0 10px 24px -20px rgba(30, 144, 255, 0.42);
 }
 
-/* ── layout utilities ── */
 .lab-grid {
 	position: relative;
 	isolation: isolate;
@@ -121,7 +114,6 @@ html, body, nav, main, section, footer {
 	background-color: var(--gallery-card-bg);
 }
 
-/* ── section dividers ── */
 .section-divider {
 	display: flex;
 	align-items: center;
@@ -161,7 +153,6 @@ html, body, nav, main, section, footer {
 	100% { opacity: 1; transform: rotate(0deg) translateY(0) scale(1); }
 }
 
-/* ── dark mode base ── */
 html[data-theme='dark'] {
 	background-color: #0f172a;
 }
@@ -256,7 +247,7 @@ html[data-theme='dark'] #mobile-nav-menu {
 html[data-theme='dark'] #mobile-nav-menu .text-gray-600 { color: #dbeafe !important; }
 html[data-theme='dark'] #mobile-nav-menu .border-gray-200 { border-color: rgba(148, 163, 184, 0.3) !important; }
 
-/* ── reduced motion overrides ── */
+/* reduced motion overrides */
 @media (prefers-reduced-motion: reduce) {
 	html { scroll-behavior: auto; }
 

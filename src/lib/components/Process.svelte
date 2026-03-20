@@ -46,6 +46,10 @@
 		return openProcessSteps.includes(index);
 	}
 
+	function isProcessStepActive(index) {
+		return isProcessStepOpen(index) || hoverProcessStep === index;
+	}
+
 	function hoverStep(index) {
 		hoverProcessStep = index;
 	}
@@ -55,7 +59,8 @@
 	}
 
 	function toggleProcessStep(index) {
-		if (isProcessStepOpen(index)) {
+		const isOpen = isProcessStepOpen(index);
+		if (isOpen) {
 			openProcessSteps = openProcessSteps.filter((i) => i !== index);
 			if (hoverProcessStep === index) hoverProcessStep = null;
 			return;
@@ -95,7 +100,7 @@
 	<div class="process-chip-stack mt-10" aria-label="Catalyst process steps">
 		{#each processSteps as step, index}
 			<div
-				class={`process-chip-row ${(isProcessStepOpen(index) || hoverProcessStep === index) ? 'is-active' : ''}`}
+				class={`process-chip-row ${isProcessStepActive(index) ? 'is-active' : ''}`}
 				style={`--chip-order: ${index}; --icon-rotate: ${step.iconRotate}; --icon-opacity: ${step.iconOpacity}; --icon-scale: ${step.iconScale};`}
 			>
 				<span class="process-chip-icon" aria-hidden="true">
@@ -105,7 +110,7 @@
 				</span>
 				<button
 					type="button"
-					class={`process-chip-hit ${(isProcessStepOpen(index) || hoverProcessStep === index) ? 'is-active' : ''}`}
+					class={`process-chip-hit ${isProcessStepActive(index) ? 'is-active' : ''}`}
 					onmouseenter={() => hoverStep(index)}
 					onmouseleave={() => unhoverStep(index)}
 					onfocus={() => hoverStep(index)}
@@ -115,7 +120,7 @@
 					aria-label={`${step.title}: ${step.description}`}
 				>
 					<span class="process-chip-pill">{step.title}</span>
-					<span class="process-chip-explanation" aria-hidden={!(isProcessStepOpen(index) || hoverProcessStep === index)}>{step.description}</span>
+					<span class="process-chip-explanation" aria-hidden={!isProcessStepActive(index)}>{step.description}</span>
 				</button>
 			</div>
 		{/each}
@@ -327,7 +332,6 @@
 		}
 	}
 
-	/* dark mode */
 	:global(html[data-theme='dark'] .process-chip-pill) {
 		background: rgba(15, 23, 42, 0.56);
 		border-color: rgba(59, 130, 246, 0.32);
