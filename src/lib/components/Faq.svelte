@@ -8,25 +8,30 @@
 			a: 'YSWS stands for You Ship, We Ship. Complete your project and share it with the world (publish it on <a href="https://itch.io/" target="_blank" rel="noreferrer">itch.io</a>, <a href="https://vercel.com/" target="_blank" rel="noreferrer">Vercel</a>, or another platform), and receive rewards for your work.'
 		},
 		{
+			q: 'What is Hack Club?',
+			a: "Hack Club is a nonprofit network of teen makers around the world. We provide free curriculum, mentorship, and funding to help students learn to code and build projects. You can learn more at <a href='https://hackclub.com' target='_blank' rel='noreferrer'>hackclub.com</a>."
+		},
+		{
 			q: 'How much does it cost?',
 			a: 'Everything is completely free! This is possible because of the generous support of Hack Club sponsors.'
 		},
 		{
 			q: 'Who can participate?',
-			a: 'Anyone between the ages of 13 - 18 is welcome to participate. No experience is necessary, just a willingness to experiment and have fun!'
+			a: 'Anyone between the ages of 13 - 18 inclusive is welcome to participate. No experience is necessary!'
 		},
 		{
 			q: 'What kind of projects are allowed?',
-			a: 'Anything that reinterprets an interface and turns it into something interactive (not necessarily a game). Projects should be tracked on Hackatime and open-source on GitHub.'
+			a: 'Anything that reinterprets an interface and turns it into something interactive (not necessarily a game). Projects should be tracked on <a href=\'https://hackatime.hackclub.com/\' target=\'_blank\' rel=\'noreferrer\'>Hackatime</a> and open-source on <a href=\'https://github.com/\' target=\'_blank\' rel=\'noreferrer\'>GitHub</a>.'
 		},
 		{
 			q: 'Can I work with other people?',
-			a: "Absolutely! Collaborating with others is encouraged. You can form teams of up to 3 people and work together on your projects. However, each person's contributions should be tracked seperately."
+			a: "Yes! Collaborating with others is encouraged. You can form teams of up to 3 people and work together on your projects. However, each person's contributions should be tracked seperately on <a href='https://hackatime.hackclub.com/' target='_blank' rel='noreferrer'>Hackatime</a>."
 		},
 		{
 			q: 'Can I use AI?',
 			a: "AI is heavily discouraged, but usage in code is limited to 30%. AI-generated art is not allowed."
 		},
+
 	];
 
 	let openFaq = $state(null);
@@ -148,11 +153,37 @@
 	:global(#faq a) {
 		color: #1e90ff;
 		text-decoration: underline;
-		text-underline-offset: 2px;
+		text-decoration-color: rgba(30, 144, 255, 0.48);
+		text-decoration-thickness: 1.25px;
+		text-underline-offset: 0.18em;
+		transition: text-decoration-color 220ms ease, text-decoration-thickness 220ms ease, text-underline-offset 220ms ease;
+	}
+
+	:global(#faq a:visited),
+	:global(#faq a:active) {
+		color: #1e90ff;
+	}
+
+	:global(#faq a:hover),
+	:global(#faq a:focus-visible) {
+		text-decoration-color: rgba(30, 144, 255, 0.95);
+		text-decoration-thickness: 2px;
+		text-underline-offset: 0.24em;
 	}
 
 	:global(html[data-theme='dark'] #faq a) {
 		color: #93c5fd;
+		text-decoration-color: rgba(147, 197, 253, 0.6);
+	}
+
+	:global(html[data-theme='dark'] #faq a:visited),
+	:global(html[data-theme='dark'] #faq a:active) {
+		color: #93c5fd;
+	}
+
+	:global(html[data-theme='dark'] #faq a:hover),
+	:global(html[data-theme='dark'] #faq a:focus-visible) {
+		text-decoration-color: rgba(147, 197, 253, 0.95);
 	}
 
 	@media (prefers-reduced-motion: reduce) {

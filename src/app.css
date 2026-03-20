@@ -39,6 +39,28 @@ button:focus-visible {
 	border-radius: 0.45rem;
 }
 
+a:not(.micro-interactive):not(.no-underline):not(.link-lift) {
+	color: var(--accent-blue);
+	text-decoration-line: underline;
+	text-decoration-color: rgba(30, 144, 255, 0.48);
+	text-decoration-thickness: 1.25px;
+	text-underline-offset: 0.18em;
+	transition: text-decoration-color 220ms ease, text-decoration-thickness 220ms ease, text-underline-offset 220ms ease, opacity 220ms ease;
+}
+
+a:not(.micro-interactive):not(.no-underline):not(.link-lift):visited,
+a:not(.micro-interactive):not(.no-underline):not(.link-lift):active {
+	color: var(--accent-blue);
+}
+
+a:not(.micro-interactive):not(.no-underline):not(.link-lift):hover,
+a:not(.micro-interactive):not(.no-underline):not(.link-lift):focus-visible {
+	text-decoration-color: rgba(30, 144, 255, 0.95);
+	text-decoration-thickness: 2px;
+	text-underline-offset: 0.24em;
+	opacity: 0.96;
+}
+
 html, body, nav, main, section, footer {
 	transition: background-color 340ms ease, color 340ms ease, border-color 340ms ease;
 }
@@ -161,6 +183,21 @@ html[data-theme='dark'] body {
 	background-color: #0f172a;
 	color: #e5e7eb;
 	--gallery-card-bg: rgba(30, 41, 59, 0.72);
+}
+
+html[data-theme='dark'] a:not(.micro-interactive):not(.no-underline):not(.link-lift) {
+	color: #93c5fd;
+	text-decoration-color: rgba(147, 197, 253, 0.6);
+}
+
+html[data-theme='dark'] a:not(.micro-interactive):not(.no-underline):not(.link-lift):visited,
+html[data-theme='dark'] a:not(.micro-interactive):not(.no-underline):not(.link-lift):active {
+	color: #93c5fd;
+}
+
+html[data-theme='dark'] a:not(.micro-interactive):not(.no-underline):not(.link-lift):hover,
+html[data-theme='dark'] a:not(.micro-interactive):not(.no-underline):not(.link-lift):focus-visible {
+	text-decoration-color: rgba(147, 197, 253, 0.95);
 }
 
 html[data-theme='dark'] .bg-white\/90 {

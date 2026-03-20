@@ -1,4 +1,6 @@
 <script>
+	import favicon from '$lib/assets/favicon.svg';
+
 	let { isDark, toggleTheme } = $props();
 
 	let mobileMenuOpen = $state(false);
@@ -12,22 +14,23 @@
 	}
 </script>
 
-<nav class="fixed inset-x-0 top-0 z-50 border-b border-gray-100 bg-white/90 backdrop-blur-sm">
+	<nav class="fixed inset-x-0 top-0 z-50 border-b border-gray-100 bg-white/90 backdrop-blur-sm">
 	<a
 		href="#page-top"
 		aria-label="Back to hero section"
-		class="micro-interactive absolute left-2 top-1/2 z-10 -translate-y-1/2 font-heading text-lg font-bold leading-none tracking-tight text-gray-900 no-underline hover:text-gray-900 sm:left-3 md:left-4"
+		class="micro-interactive absolute left-2 top-1/2 z-10 inline-flex -translate-y-1/2 items-center gap-2 font-heading text-lg font-bold leading-none tracking-tight text-gray-900 no-underline hover:text-gray-900 sm:left-3 md:left-4"
 	>
-		Catalyst
+		<img src={favicon} alt="" class="h-5 w-5 rounded-[0.35rem] border border-dodger/30 bg-white p-0.5 sm:h-6 sm:w-6" />
+		<span>Catalyst</span>
 	</a>
-	<div class="mx-auto flex h-[var(--nav-height)] w-full max-w-5xl items-center justify-end px-4 sm:px-6">
+	<div class="mx-auto flex h-(--nav-height) w-full max-w-5xl items-center justify-end px-4 sm:px-6">
 		<div class="hidden items-center gap-7 md:flex md:gap-9">
 			<ul class="hidden items-center gap-8 md:flex">
 				{#each [['#challenge', 'Challenge'], ['#process', 'Process'], ['#prizes', 'Prizes'], ['#faq', 'FAQ']] as [href, label]}
 					<li>
 						<a
 							{href}
-							class="micro-interactive group relative inline-block -translate-y-0 text-sm font-medium text-gray-500 transition-all duration-200 hover:-translate-y-0.5 hover:text-dodger"
+							class="micro-interactive group relative inline-block translate-y-0 text-sm font-medium text-gray-500 transition-all duration-200 hover:-translate-y-0.5 hover:text-dodger"
 						>
 							{label}
 							<span
