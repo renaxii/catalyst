@@ -7,14 +7,14 @@
 			prizes: [
 				{ item: 'stickers' },
 				{ item: 'caffeine grant', result: 'unfocused → focused' },
-				{ item: 'reusable smart notebook', result: 'notes can be erased and rewritten' }
+				{ item: 'nfc tags', result: 'programmable to change phone interface' }
 			]
 		},
 		{
 			label: 'build',
 			description: 'iterate on your ideas',
 			prizes: [
-				{ item: 'nfc tags', result: 'programmable to change phone interface' },
+				{ item: 'reusable smart notebook', result: 'notes can be erased and rewritten' },
 				{ item: 'macropad', result: 'can be customized to perform (an) action(s)' },
 				{ item: 'camera', result: 'intangible code on phone → physical output' }
 			]

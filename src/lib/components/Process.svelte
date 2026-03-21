@@ -32,7 +32,7 @@
 		},
 		{
 			title: 'earn points',
-			description: 'get rewards or start your next build',
+			description: 'interact with others\' projects & share your own',
 			iconRotate: '-34deg',
 			iconOpacity: 0.6,
 			iconScale: 0.96
@@ -95,7 +95,7 @@
 		Here's how it works:
 	</h2>
 	<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 2;">
-		Take an idea and build on it.
+		Take an idea and build on it!
 	</p>
 	<div class="process-chip-stack mt-10" aria-label="Catalyst process steps">
 		{#each processSteps as step, index}
