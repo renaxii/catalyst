@@ -1,5 +1,8 @@
 export function reveal(node) {
+	node.classList.add('reveal-pending');
+
 	if (typeof IntersectionObserver === 'undefined') {
+		node.classList.remove('reveal-pending');
 		node.classList.add('is-visible');
 		return;
 	}
@@ -7,6 +10,7 @@ export function reveal(node) {
 	const observer = new IntersectionObserver(
 		([entry]) => {
 			if (!entry.isIntersecting) return;
+			node.classList.remove('reveal-pending');
 			node.classList.add('is-visible');
 			observer.unobserve(node);
 		},
@@ -17,6 +21,7 @@ export function reveal(node) {
 
 	return {
 		destroy() {
+			node.classList.remove('reveal-pending');
 			observer.disconnect();
 		}
 	};

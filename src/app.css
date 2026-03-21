@@ -65,25 +65,25 @@ html, body, nav, main, section, footer {
 	transition: background-color 340ms ease, color 340ms ease, border-color 340ms ease;
 }
 
-.reveal-section {
+.reveal-section.reveal-pending {
 	opacity: 0;
 	transform: translateY(20px);
 	transition: opacity 560ms ease-out, transform 560ms ease-out;
 }
 
-.reveal-item {
+.reveal-section.reveal-pending .reveal-item {
 	opacity: 0;
 	transform: translateY(20px);
 	transition: opacity 560ms ease-out, transform 560ms ease-out;
 	transition-delay: calc(var(--reveal-order, 0) * 95ms);
 }
 
-.reveal-section.is-visible {
+.reveal-section.reveal-pending.is-visible {
 	opacity: 1;
 	transform: translateY(0);
 }
 
-.is-visible .reveal-item {
+.reveal-section.reveal-pending.is-visible .reveal-item {
 	opacity: 1;
 	transform: translateY(0);
 }
