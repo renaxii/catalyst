@@ -72,7 +72,7 @@
 
 <section
 	use:reveal
-	class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-9 sm:py-10 md:py-11"
+	class="reveal-section mx-auto w-full max-w-4xl py-9 sm:py-10 md:py-11"
 >
 	<div class="section-divider reveal-item mb-10 sm:mb-12 md:mb-14" style="--reveal-order: 0;" aria-hidden="true">
 		<span class="section-divider__line"></span>
@@ -88,7 +88,7 @@
 			</p>
 		</div>
 		<div>
-			<h2 id="process" class="section-title-accent reveal-item process-title scroll-mt-24 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-5xl" style="--reveal-order: 1;">
+			<h2 id="process" class="reveal-item process-title scroll-mt-[calc(var(--nav-height)+0.9rem)] font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-5xl" style="--reveal-order: 1;">
 				<span class="process-reaction" aria-hidden="true">
 					<svg viewBox="0 0 400 360" class="process-reaction__svg" focusable="false">
 						<path d="M200 30 L365 320 L35 320 Z" />

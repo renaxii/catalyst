@@ -52,7 +52,7 @@
 
 <section
 	use:reveal
-	class="prizes-section reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-7 sm:py-8 md:py-9"
+	class="prizes-section reveal-section mx-auto w-full max-w-4xl py-7 sm:py-8 md:py-9"
 >
 	<div class="section-divider reveal-item mb-5 sm:mb-6 md:mb-7" style="--reveal-order: 0;" aria-hidden="true">
 		<span class="section-divider__line"></span>
@@ -68,7 +68,7 @@
 			</p>
 		</div>
 		<div>
-			<h2 id="prizes" class="section-title-accent reveal-item mt-1 scroll-mt-24 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-[2.7rem]" style="--reveal-order: 1;">
+			<h2 id="prizes" class="reveal-item mt-1 scroll-mt-[calc(var(--nav-height)+0.9rem)] font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-[2.7rem]" style="--reveal-order: 1;">
 				Win epic prizes!
 			</h2>
 

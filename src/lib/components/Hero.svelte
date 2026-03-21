@@ -115,7 +115,7 @@
 {/if}
 
 <section
-	id="hero"
+	id="page-top"
 	bind:this={heroSectionEl}
 	role="banner"
 	onmousemove={handleHeroMouseMove}

@@ -4,7 +4,7 @@
 
 <section
 	use:reveal
-	class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-9 sm:py-10 md:py-11"
+	class="reveal-section mx-auto w-full max-w-4xl py-9 sm:py-10 md:py-11"
 >
 	<div class="section-divider reveal-item mb-10 sm:mb-12 md:mb-14" style="--reveal-order: 0;" aria-hidden="true">
 		<span class="section-divider__line"></span>
@@ -20,7 +20,7 @@
 			</p>
 		</div>
 		<div>
-			<h2 id="challenge" class="section-title-accent reveal-item scroll-mt-[calc(var(--nav-height)+0.9rem)] font-heading text-xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-5xl" style="--reveal-order: 1;">
+			<h2 id="challenge" class="reveal-item scroll-mt-[calc(var(--nav-height)+0.9rem)] font-heading text-xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-5xl" style="--reveal-order: 1;">
 				A simple rule:
 				<span class="block whitespace-nowrap">interface becomes interaction</span>
 			</h2>
@@ -51,6 +51,23 @@
 		margin-left: -0.72rem;
 		margin-right: -0.72rem;
 		transition: transform 240ms ease, border-color 240ms ease, box-shadow 240ms ease, opacity 220ms ease;
+		display: flex;
+		align-items: center;
+		gap: 0.56rem;
+	}
+
+	.challenge-example::before {
+		content: '';
+		flex: 0 0 0.42rem;
+		width: 0.42rem;
+		height: 0.42rem;
+		border-radius: 999px;
+		background: rgba(30, 144, 255, 0.72);
+		transition: transform 220ms ease;
+	}
+
+	.challenge-example:hover::before {
+		transform: scale(1.2);
 	}
 
 	.challenge-example::after {
@@ -82,9 +99,17 @@
 		border-color: transparent;
 	}
 
+	:global(html[data-theme='dark'] .challenge-example::before) {
+		background: rgba(147, 197, 253, 0.84);
+	}
+
 	:global(html[data-theme='dark'] .challenge-example:hover) {
 		border-color: rgba(96, 165, 250, 0.28);
 		box-shadow: 0 10px 24px -20px rgba(96, 165, 250, 0.45);
+	}
+
+	:global(html[data-theme='dark'] .challenge-example:hover::before) {
+		transform: scale(1.2);
 	}
 
 	:global(html[data-theme='dark'] .challenge-example::after) {

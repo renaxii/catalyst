@@ -76,15 +76,30 @@
 			aria-label="Catalyst concept background"
 			tabindex="-1"
 		>
-			<p class="concept-kicker">behind the concept</p>
+			<div class="concept-header">
+				<p class="concept-kicker">behind the concept</p>
+				<button
+					type="button"
+					onclick={closeConceptPopup}
+					aria-label="Close concept popup"
+					class="concept-close-btn"
+				>
+					<svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+						<path d="M4 4L12 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+						<path d="M12 4L4 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+					</svg>
+				</button>
+			</div>
 			<h3 class="concept-title">my inspiration</h3>
-			<p class="concept-copy">
-				Science has always been among my favorite subjects, especially chemistry, so that was a big part of my inspiration for this project. I tried to include several alchemy and chemistry references. For example, the section dividers are meant to resemble the alchemical symbols for air, water, fire, and earth.
-				<br><br>
-				You may be wondering how this is related to chemistry or alchemy at all. Well, my main inspiration was the concept of "transmutation," which is basically changing base metals (lead, iron) into noble metals (gold, silver). Anyway, I'm really bad at explaining but I think this is pretty self-explanatory, so I'll leave it at that. If you'd like to know more, feel free to look it up!
-				<br><br>
-				I also really like the color blue, as well as the concept of minimalism (especially the Swiss editorial design style), so I tried to balance those features. 
-			</p>
+			<div class="concept-content">
+				<p class="concept-copy">
+					Science has always been among my favorite subjects, especially chemistry, so that was a big part of my inspiration for this project. I tried to include several alchemy and chemistry references. For example, the section dividers are meant to resemble the alchemical symbols for air, water, fire, and earth.
+					<br><br>
+					You may be wondering how this is related to chemistry or alchemy at all. Well, my main inspiration was the concept of "transmutation," which is basically changing base metals (lead, iron) into noble metals (gold, silver). Anyway, I'm really bad at explaining but I think this is pretty self-explanatory, so I'll leave it at that. If you'd like to know more, feel free to look it up!
+					<br><br>
+					I also really like the color blue, as well as the concept of minimalism (especially the Swiss editorial design style), so I tried to balance those features. 
+				</p>
+			</div>
 		</div>
 	</div>
 {/if}
@@ -124,11 +139,73 @@
 
 	.concept-dialog {
 		width: min(100%, 44rem);
+		max-height: 85vh;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
 		border-radius: 1.2rem;
 		border: 1px solid rgba(30, 144, 255, 0.3);
 		background: rgba(255, 255, 255, 0.98);
 		padding: 1.7rem 1.85rem 1.8rem;
 		box-shadow: 0 26px 80px -42px rgba(30, 144, 255, 0.55);
+	}
+
+	.concept-header {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 0.75rem;
+	}
+
+	.concept-close-btn {
+		flex: 0 0 auto;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 2rem;
+		height: 2rem;
+		padding: 0;
+		background: transparent;
+		border: 1px solid rgba(148, 163, 184, 0.3);
+		border-radius: 0.5rem;
+		color: #64748b;
+		cursor: pointer;
+		transition: all 200ms ease;
+	}
+
+	.concept-close-btn:hover,
+	.concept-close-btn:focus-visible {
+		border-color: rgba(30, 144, 255, 0.46);
+		background: rgba(239, 246, 255, 0.9);
+		color: #1e3a8a;
+	}
+
+	.concept-content {
+		flex: 1 1 auto;
+		min-height: 0;
+		overflow-y: auto;
+		overflow-x: hidden;
+		padding-right: 0.65rem;
+		margin-top: 0.9rem;
+		scrollbar-gutter: stable;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.concept-content::-webkit-scrollbar {
+		width: 6px;
+	}
+
+	.concept-content::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	.concept-content::-webkit-scrollbar-thumb {
+		background: rgba(30, 144, 255, 0.4);
+		border-radius: 3px;
+	}
+
+	.concept-content::-webkit-scrollbar-thumb:hover {
+		background: rgba(30, 144, 255, 0.6);
 	}
 
 	.concept-kicker {
@@ -153,26 +230,6 @@
 		font-size: 1.02rem;
 		line-height: 1.72;
 		color: #374151;
-	}
-
-	.concept-close {
-		margin-top: 1.15rem;
-		border: 1px solid rgba(148, 163, 184, 0.4);
-		border-radius: 0.55rem;
-		background: #f8fafc;
-		padding: 0.56rem 0.95rem;
-		font-size: 0.78rem;
-		font-weight: 600;
-		letter-spacing: 0.01em;
-		color: #334155;
-		transition: border-color 200ms ease, background-color 200ms ease, color 200ms ease;
-	}
-
-	.concept-close:hover,
-	.concept-close:focus-visible {
-		border-color: rgba(30, 144, 255, 0.46);
-		background: rgba(239, 246, 255, 0.9);
-		color: #1e3a8a;
 	}
 
 	:global(html[data-theme='dark'] .concept-trigger) {
@@ -205,16 +262,46 @@
 		color: #cbd5e1;
 	}
 
-	:global(html[data-theme='dark'] .concept-close) {
-		background: rgba(30, 41, 59, 0.84);
-		border-color: rgba(148, 163, 184, 0.44);
-		color: #e2e8f0;
+	:global(html[data-theme='dark'] .concept-close-btn) {
+		border-color: rgba(148, 163, 184, 0.4);
+		color: #94a3b8;
 	}
 
-	:global(html[data-theme='dark'] .concept-close:hover),
-	:global(html[data-theme='dark'] .concept-close:focus-visible) {
-		border-color: rgba(147, 197, 253, 0.58);
+	:global(html[data-theme='dark'] .concept-close-btn:hover),
+	:global(html[data-theme='dark'] .concept-close-btn:focus-visible) {
+		border-color: rgba(147, 197, 253, 0.6);
 		background: rgba(30, 64, 175, 0.24);
 		color: #dbeafe;
+	}
+
+	@media (max-width: 640px) {
+		.concept-overlay {
+			padding: 0.85rem;
+		}
+
+		.concept-dialog {
+			max-height: 90vh;
+			padding: 1rem 1rem 1.1rem;
+			border-radius: 0.95rem;
+		}
+
+		.concept-close-btn {
+			width: 2.15rem;
+			height: 2.15rem;
+		}
+
+		.concept-title {
+			margin-top: 0.4rem;
+		}
+
+		.concept-content {
+			padding-right: 0.45rem;
+			margin-top: 0.7rem;
+		}
+
+		.concept-copy {
+			font-size: 0.97rem;
+			line-height: 1.65;
+		}
 	}
 </style>

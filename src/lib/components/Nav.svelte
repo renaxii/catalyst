@@ -12,11 +12,41 @@
 	function closeMobileMenu() {
 		mobileMenuOpen = false;
 	}
+
+	function handleAnchorClick(event) {
+		const href = event.currentTarget.getAttribute('href');
+		if (!href?.startsWith('#')) return;
+
+		event.preventDefault();
+		closeMobileMenu();
+
+		const targetId = href.substring(1);
+		const targetElement = document.getElementById(targetId);
+
+		if (!targetElement) return;
+
+		// Use requestAnimationFrame to ensure layout is ready
+		requestAnimationFrame(() => {
+			const navHeight = 4; // 4rem in units of 16px
+			const navHeightPx = navHeight * 16;
+			const gapPx = 0.9 * 16; // 0.9rem gap
+			const totalOffset = navHeightPx + gapPx;
+
+			const elementRect = targetElement.getBoundingClientRect();
+			const scrollTop = window.scrollY + elementRect.top - totalOffset;
+
+			window.scrollTo({
+				top: scrollTop,
+				behavior: 'smooth'
+			});
+		});
+	}
 </script>
 
 	<nav class="fixed inset-x-0 top-0 z-50 border-b border-gray-100 bg-white/90 backdrop-blur-sm">
 	<a
 		href="#page-top"
+		onclick={handleAnchorClick}
 		aria-label="Back to hero section"
 		class="micro-interactive absolute left-3 top-1/2 z-10 inline-flex -translate-y-1/2 items-center gap-2.5 font-heading text-[1.02rem] font-bold leading-none tracking-tight text-gray-900 no-underline hover:text-gray-900 sm:left-4 md:left-6"
 	>
@@ -29,6 +59,7 @@
 					<li>
 						<a
 							{href}
+							onclick={handleAnchorClick}
 							class="micro-interactive group relative inline-block translate-y-0 text-[0.78rem] font-semibold uppercase tracking-[0.12em] text-gray-500 transition-all duration-200 hover:-translate-y-0.5 hover:text-dodger"
 						>
 							{label}
@@ -95,7 +126,7 @@
 				<li>
 					<a
 						{href}
-						onclick={closeMobileMenu}
+						onclick={(e) => { handleAnchorClick(e); closeMobileMenu(); }}
 						class="micro-interactive block rounded-md px-3 py-2.5 text-sm font-semibold uppercase tracking-[0.08em] text-gray-600 transition-colors duration-200 hover:text-dodger"
 					>
 						{label}
