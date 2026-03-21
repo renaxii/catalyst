@@ -52,25 +52,27 @@
 
 <section
 	use:reveal
-	class="prizes-section reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-6 sm:py-7 md:py-8"
+	class="prizes-section reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-7 sm:py-8 md:py-9"
 >
 	<div class="section-divider reveal-item mb-5 sm:mb-6 md:mb-7" style="--reveal-order: 0;" aria-hidden="true">
 		<span class="section-divider__line"></span>
 		<span class="section-divider__triangle">▽̶</span>
 		<span class="section-divider__line"></span>
 	</div>
-	<p
-		id="prizes"
-		class="reveal-item lab-marker scroll-mt-24 font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
-		style="--reveal-order: 0;"
-	>
-		[ PRIZES ]
-	</p>
-	<h2 class="reveal-item mt-3 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-5xl" style="--reveal-order: 1;">
-		Win epic prizes!
-	</h2>
+	<div class="mt-1 grid gap-8 md:grid-cols-[11rem_minmax(0,1fr)] md:items-center md:gap-10">
+		<div class="reveal-item" style="--reveal-order: 0;">
+			<p
+				class="lab-marker scroll-mt-24 font-mono text-[0.74rem] font-semibold uppercase tracking-[0.2em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
+			>
+				[ PRIZES ]
+			</p>
+		</div>
+		<div>
+			<h2 id="prizes" class="section-title-accent reveal-item mt-1 scroll-mt-24 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-[2.7rem]" style="--reveal-order: 1;">
+				Win epic prizes!
+			</h2>
 
-	<div class="stages mt-4 sm:mt-5">
+			<div class="stages mt-6 sm:mt-7">
 		{#each stages as stage, stageIndex}
 			<section class="stage reveal-item" style={`--reveal-order: ${stageOrder(stageIndex)};`}>
 				<div class="stage-head">
@@ -94,6 +96,8 @@
 				</div>
 			</section>
 		{/each}
+			</div>
+		</div>
 	</div>
 </section>
 
@@ -108,6 +112,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.64rem;
+		padding-top: 0.2rem;
 	}
 
 	.stage-head {
@@ -119,10 +124,11 @@
 
 	.stage-label {
 		margin: 0;
+		min-width: 5.2rem;
 		font-size: clamp(0.95rem, 0.35vw + 0.86rem, 1.08rem);
-		font-weight: 500;
+		font-weight: 600;
 		line-height: 1.2;
-		color: #111827;
+		color: rgba(15, 118, 220, 0.92);
 		text-transform: lowercase;
 	}
 

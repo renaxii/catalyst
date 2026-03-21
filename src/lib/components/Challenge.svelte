@@ -4,38 +4,42 @@
 
 <section
 	use:reveal
-	class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-12 sm:py-14 md:py-16"
+	class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-9 sm:py-10 md:py-11"
 >
 	<div class="section-divider reveal-item mb-10 sm:mb-12 md:mb-14" style="--reveal-order: 0;" aria-hidden="true">
 		<span class="section-divider__line"></span>
 		<span class="section-divider__triangle">△</span>
 		<span class="section-divider__line"></span>
 	</div>
-	<p
-		id="challenge"
-		class="reveal-item lab-marker scroll-mt-24 font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
-		style="--reveal-order: 0;"
-	>
-		[ CHALLENGE ]
-	</p>
-	<h2 class="reveal-item mt-4 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-6xl" style="--reveal-order: 1;">
-		A simple rule:
-		<span class="block">interface becomes interaction</span>
-	</h2>
-	<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 2;">
-		Take something people already know and transform it into something completely new.
-	</p>
-	<p class="reveal-item mt-6 text-xs font-semibold uppercase tracking-[0.16em] text-gray-500" style="--reveal-order: 3;">
-		Examples
-	</p>
-	<ul class="mt-3 space-y-3 text-base leading-relaxed text-gray-600 md:text-lg">
-		<li class="challenge-example reveal-item" style="--reveal-order: 4;">Spotify → puzzle game</li>
-		<li class="challenge-example reveal-item" style="--reveal-order: 5;">Notes app → visual novel</li>
-		<li class="challenge-example reveal-item" style="--reveal-order: 6;">Calendar → survival sim</li>
-	</ul>
-	<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 7;">
-		The more unexpected the transformation, the better!
-	</p>
+	<div class="mt-1 grid gap-8 md:grid-cols-[11rem_minmax(0,1fr)] md:items-center md:gap-10">
+		<div class="reveal-item" style="--reveal-order: 0;">
+			<p
+				class="lab-marker scroll-mt-24 font-mono text-[0.74rem] font-semibold uppercase tracking-[0.2em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
+			>
+				[ CHALLENGE ]
+			</p>
+		</div>
+		<div>
+			<h2 id="challenge" class="section-title-accent reveal-item scroll-mt-[calc(var(--nav-height)+0.9rem)] font-heading text-xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-5xl" style="--reveal-order: 1;">
+				A simple rule:
+				<span class="block whitespace-nowrap">interface becomes interaction</span>
+			</h2>
+			<p class="reveal-item mt-7 max-w-2xl text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 2;">
+				Take something people already know and transform it into something completely new.
+			</p>
+			<p class="reveal-item mt-7 text-xs font-semibold uppercase tracking-[0.16em] text-gray-500 md:mt-8" style="--reveal-order: 3;">
+				Examples
+			</p>
+			<ul class="mt-3 space-y-3 text-base leading-relaxed text-gray-600 md:mt-4 md:max-w-2xl md:text-lg">
+				<li class="challenge-example reveal-item" style="--reveal-order: 4;">Spotify → puzzle game</li>
+				<li class="challenge-example reveal-item" style="--reveal-order: 5;">Notes app → visual novel</li>
+				<li class="challenge-example reveal-item" style="--reveal-order: 6;">Calendar → survival sim</li>
+			</ul>
+			<p class="reveal-item mt-7 max-w-2xl text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 7;">
+				The more unexpected the transformation, the better.
+			</p>
+		</div>
+	</div>
 </section>
 
 <style>
@@ -58,7 +62,7 @@
 		font-size: 0.63rem;
 		line-height: 1;
 		color: rgba(30, 144, 255, 0.58);
-		opacity: 0;
+		opacity: 0.34;
 		transition: opacity 220ms ease, transform 220ms ease;
 	}
 

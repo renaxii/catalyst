@@ -59,24 +59,26 @@
 
 <section
 	use:reveal
-	class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-12 sm:py-14 md:py-16"
+	class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-9 sm:py-10 md:py-11"
 >
 	<div class="section-divider reveal-item mb-10 sm:mb-12 md:mb-14" style="--reveal-order: 0;" aria-hidden="true">
 		<span class="section-divider__line"></span>
 		<span class="section-divider__triangle">✦</span>
 		<span class="section-divider__line"></span>
 	</div>
-	<p
-		id="faq"
-		class="reveal-item lab-marker scroll-mt-24 font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
-		style="--reveal-order: 0;"
-	>
-		[ FAQ ]
-	</p>
-	<h2 class="reveal-item mt-4 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-6xl" style="--reveal-order: 1;">
-		Questions
-	</h2>
-	<div class="reveal-item mt-10 border-t border-gray-200" style="--reveal-order: 2;">
+	<div class="mt-1 grid gap-8 md:grid-cols-[11rem_minmax(0,1fr)] md:items-center md:gap-10">
+		<div class="reveal-item" style="--reveal-order: 0;">
+			<p
+				class="lab-marker scroll-mt-24 font-mono text-[0.74rem] font-semibold uppercase tracking-[0.2em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
+			>
+				[ FAQ ]
+			</p>
+		</div>
+		<div>
+			<h2 id="faq" class="section-title-accent reveal-item scroll-mt-24 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-5xl" style="--reveal-order: 1;">
+				Questions
+			</h2>
+			<div class="reveal-item mt-10 border-t border-gray-200" style="--reveal-order: 2;">
 		{#each faqs as faq, i}
 			<div class="border-b border-gray-200">
 				<button
@@ -85,10 +87,10 @@
 					data-faq-trigger="true"
 					id={`faq-${i}-button`}
 					aria-controls={`faq-${i}-panel`}
-					class="faq-item group flex w-full items-center justify-between gap-6 px-2 py-6 text-left"
+					class="faq-item group flex w-full items-center justify-between gap-6 px-1 py-6 text-left"
 					aria-expanded={openFaq === i}
 				>
-					<span class="faq-item-label text-lg font-medium text-gray-900 transition-colors duration-200 group-hover:text-dodger">
+					<span class="faq-item-label text-[1.05rem] font-semibold text-gray-900 transition-colors duration-200 group-hover:text-dodger">
 						{faq.q}
 					</span>
 					<span
@@ -108,7 +110,7 @@
 						role="region"
 						aria-labelledby={`faq-${i}-button`}
 						transition:slide={{ duration: 280 }}
-						class="px-4 pt-3 pb-8 text-base leading-relaxed text-gray-600"
+						class="px-3 pt-3 pb-8 text-base leading-relaxed text-gray-600"
 					>
 						<div class="ml-2 border-l border-dodger/30 pl-4 pr-1 pb-1">
 							{@html faq.a}
@@ -117,6 +119,8 @@
 				{/if}
 			</div>
 		{/each}
+			</div>
+		</div>
 	</div>
 </section>
 
@@ -127,9 +131,30 @@
 		transition: opacity 220ms ease;
 	}
 
+	.faq-item::before {
+		content: '';
+		position: absolute;
+		left: -0.45rem;
+		top: 22%;
+		bottom: 22%;
+		width: 2px;
+		border-radius: 999px;
+		background: rgba(30, 144, 255, 0.46);
+		opacity: 0.34;
+		transform: scaleY(0.68);
+		transform-origin: center;
+		transition: opacity 220ms ease, transform 220ms ease;
+	}
+
 	.faq-item:hover,
 	.faq-item:focus-visible {
 		opacity: 1;
+	}
+
+	.faq-item:hover::before,
+	.faq-item:focus-visible::before {
+		opacity: 1;
+		transform: scaleY(1);
 	}
 
 	.faq-item-label {
@@ -148,6 +173,10 @@
 
 	:global(html[data-theme='dark'] .faq-item:hover) {
 		background-color: rgba(30, 144, 255, 0.08) !important;
+	}
+
+	:global(html[data-theme='dark'] .faq-item::before) {
+		background: rgba(147, 197, 253, 0.62);
 	}
 
 	:global(#faq a) {

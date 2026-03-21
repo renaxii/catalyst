@@ -14,6 +14,25 @@
 	let manualThemeSet = false;
 	const THEME_KEY = 'catalyst-theme';
 	let themeMediaQuery;
+	let clickSparks = $state([]);
+	let nextSparkId = 0;
+
+	function spawnClickSparks(event) {
+		if (prefersReducedMotion) return;
+		const x = event.clientX;
+		const y = event.clientY;
+		const count = 5;
+		const batch = Array.from({ length: count }, (_, i) => {
+			const angle = (i / count) * Math.PI * 2 - Math.PI / 2;
+			const dist = 14 + Math.random() * 20;
+			return { id: nextSparkId++, x, y, dx: Math.cos(angle) * dist, dy: Math.sin(angle) * dist };
+		});
+		clickSparks = [...clickSparks, ...batch];
+		const ids = new Set(batch.map((p) => p.id));
+		setTimeout(() => {
+			clickSparks = clickSparks.filter((p) => !ids.has(p.id));
+		}, 460);
+	}
 
 	function applyTheme(value) {
 		isDark = value;
@@ -40,13 +59,23 @@
 
 		themeMediaQuery.addEventListener('change', onThemeChange);
 		reducedMotionMQ.addEventListener('change', onMotionChange);
+		window.addEventListener('pointerdown', spawnClickSparks, { passive: true });
 
 		return () => {
 			themeMediaQuery?.removeEventListener('change', onThemeChange);
 			reducedMotionMQ.removeEventListener('change', onMotionChange);
+			window.removeEventListener('pointerdown', spawnClickSparks);
 		};
 	});
 </script>
+
+{#if clickSparks.length}
+	<div class="tap-sparks-layer" aria-hidden="true">
+		{#each clickSparks as p (p.id)}
+			<span class="tap-spark" style="left: {p.x}px; top: {p.y}px; --dx: {p.dx.toFixed(2)}px; --dy: {p.dy.toFixed(2)}px;"></span>
+		{/each}
+	</div>
+{/if}
 
 <div id="page-top" aria-hidden="true"></div>
 
@@ -68,7 +97,7 @@
 	/>
 </a>
 
-<main class="lab-grid overflow-x-hidden px-4 pb-16 pt-[calc(var(--nav-height)+2rem)] sm:px-6 md:pb-20 md:pt-[calc(var(--nav-height)+3rem)]">
+<main class="lab-grid overflow-x-hidden px-4 pb-12 pt-[calc(var(--nav-height)+1.25rem)] sm:px-6 md:pb-14 md:pt-[calc(var(--nav-height)+1.75rem)]">
 	<Hero {prefersReducedMotion} onVisibilityChange={(v) => (showTopFlag = v)} />
 	<Challenge />
 	<Process />
@@ -77,3 +106,28 @@
 </main>
 
 <Footer />
+
+<style>
+	.tap-sparks-layer {
+		position: fixed;
+		inset: 0;
+		pointer-events: none;
+		z-index: 9997;
+		overflow: hidden;
+	}
+
+	.tap-spark {
+		position: absolute;
+		width: 3px;
+		height: 3px;
+		border-radius: 999px;
+		background: rgba(30, 144, 255, 0.9);
+		transform: translate(-50%, -50%);
+		animation: tap-spark-burst 440ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+	}
+
+	@keyframes tap-spark-burst {
+		0% { opacity: 0.88; transform: translate(-50%, -50%) translate(0px, 0px) scale(1.2); }
+		100% { opacity: 0; transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) scale(0.2); }
+	}
+</style>

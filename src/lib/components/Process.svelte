@@ -72,32 +72,34 @@
 
 <section
 	use:reveal
-	class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-12 sm:py-14 md:py-16"
+	class="reveal-section scroll-mt-24 mx-auto w-full max-w-4xl py-9 sm:py-10 md:py-11"
 >
 	<div class="section-divider reveal-item mb-10 sm:mb-12 md:mb-14" style="--reveal-order: 0;" aria-hidden="true">
 		<span class="section-divider__line"></span>
 		<span class="section-divider__triangle">▽</span>
 		<span class="section-divider__line"></span>
 	</div>
-	<p
-		id="process"
-		class="reveal-item lab-marker scroll-mt-24 font-mono text-[0.67rem] font-semibold uppercase tracking-[0.24em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
-		style="--reveal-order: 0;"
-	>
-		[ PROCESS ]
-	</p>
-	<h2 class="reveal-item process-title mt-4 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-6xl" style="--reveal-order: 1;">
-		<span class="process-reaction" aria-hidden="true">
-			<svg viewBox="0 0 400 360" class="process-reaction__svg" focusable="false">
-				<path d="M200 30 L365 320 L35 320 Z" />
-			</svg>
-		</span>
-		Here's how it works:
-	</h2>
-	<p class="reveal-item mt-7 text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 2;">
-		Take an idea and build on it!
-	</p>
-	<div class="process-chip-stack mt-10" aria-label="Catalyst process steps">
+	<div class="mt-1 grid gap-8 md:grid-cols-[11rem_minmax(0,1fr)] md:items-center md:gap-10">
+		<div class="reveal-item" style="--reveal-order: 0;">
+			<p
+				class="lab-marker scroll-mt-24 font-mono text-[0.74rem] font-semibold uppercase tracking-[0.2em] text-gray-500 sm:scroll-mt-26 md:scroll-mt-28"
+			>
+				[ PROCESS ]
+			</p>
+		</div>
+		<div>
+			<h2 id="process" class="section-title-accent reveal-item process-title scroll-mt-24 font-heading text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:text-5xl" style="--reveal-order: 1;">
+				<span class="process-reaction" aria-hidden="true">
+					<svg viewBox="0 0 400 360" class="process-reaction__svg" focusable="false">
+						<path d="M200 30 L365 320 L35 320 Z" />
+					</svg>
+				</span>
+				Here's how it works:
+			</h2>
+			<p class="reveal-item mt-7 max-w-2xl text-base leading-relaxed text-gray-600 md:text-lg" style="--reveal-order: 2;">
+				Take an idea and build on it.
+			</p>
+			<div class="process-chip-stack mt-10" aria-label="Catalyst process steps">
 		{#each processSteps as step, index}
 			<div
 				class={`process-chip-row ${isProcessStepActive(index) ? 'is-active' : ''}`}
@@ -119,11 +121,13 @@
 					aria-expanded={isProcessStepOpen(index)}
 					aria-label={`${step.title}: ${step.description}`}
 				>
-					<span class="process-chip-pill">{step.title}</span>
+					<span class="process-chip-pill"><span class="process-chip-step">0{index + 1}</span>{step.title}</span>
 					<span class="process-chip-explanation" aria-hidden={!isProcessStepActive(index)}>{step.description}</span>
 				</button>
 			</div>
 		{/each}
+			</div>
+		</div>
 	</div>
 </section>
 
@@ -234,6 +238,7 @@
 	.process-chip-pill {
 		display: inline-flex;
 		align-items: center;
+		gap: 0.7rem;
 		justify-content: flex-start;
 		min-height: 3rem;
 		padding: 0.72rem 1.3rem;
@@ -250,6 +255,15 @@
 		transition: transform 240ms ease, border-color 240ms ease, background-color 240ms ease, box-shadow 240ms ease;
 		backdrop-filter: blur(4px);
 		transform-origin: left center;
+	}
+
+	.process-chip-step {
+		font-family: 'DM Sans', sans-serif;
+		font-size: 0.72rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		opacity: 0.74;
+		color: rgba(30, 144, 255, 0.88);
 	}
 
 	.process-chip-explanation {
@@ -269,6 +283,7 @@
 	.process-chip-hit.is-active .process-chip-explanation {
 		opacity: 1;
 		transform: translateX(0);
+		color: rgba(30, 144, 255, 0.9);
 	}
 
 	.process-chip-hit:hover .process-chip-pill,

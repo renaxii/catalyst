@@ -59,17 +59,17 @@
 		e.preventDefault();
 		const x = e.clientX;
 		const y = e.clientY;
-		const count = 6;
+		const count = 11;
 		const batch = Array.from({ length: count }, (_, i) => {
 			const angle = (i / count) * Math.PI * 2 - Math.PI / 2;
-			const dist = 28 + Math.random() * 20;
+			const dist = 42 + Math.random() * 34;
 			return { id: nextPid++, x, y, dx: Math.cos(angle) * dist, dy: Math.sin(angle) * dist };
 		});
 		particles = [...particles, ...batch];
 		const ids = new Set(batch.map((p) => p.id));
 		setTimeout(() => {
 			particles = particles.filter((p) => !ids.has(p.id));
-		}, 680);
+		}, 980);
 	}
 
 	$effect(() => {
@@ -119,7 +119,7 @@
 	bind:this={heroSectionEl}
 	role="banner"
 	onmousemove={handleHeroMouseMove}
-	class="hero-grid relative mx-auto flex min-h-[calc(100svh-var(--nav-height))] w-full max-w-5xl flex-col items-center justify-center pb-16 text-center sm:pb-20 md:pb-28"
+	class="hero-grid relative mx-auto flex min-h-[calc(100svh-var(--nav-height))] w-full max-w-5xl flex-col items-start justify-center px-4 pb-14 pt-8 pl-8 text-left sm:px-6 sm:pb-18 sm:pt-10 sm:pl-10 md:pb-22 md:pt-12 md:pl-16"
 	style="--grid-ox: {((heroMouseX - 50) * 0.1).toFixed(2)}px; --grid-oy: {((heroMouseY - 50) * 0.1).toFixed(2)}px; --mx: {heroMouseX.toFixed(1)}%; --my: {heroMouseY.toFixed(1)}%; --triangle-energy: {heroTriangleEnergy.toFixed(3)}; --grid-boost: {prefersReducedMotion ? '0' : '1'};"
 >
 	{#if cursorCatalysts.length}
@@ -140,7 +140,7 @@
 	<h1
 		in:fade={{ duration: 520 }}
 		onmouseenter={() => heroTitleReactionKey++}
-		class="hero-title relative font-heading text-[clamp(2.4rem,10vw,9rem)] font-black uppercase leading-[0.86] tracking-[-0.04em] text-gray-900"
+		class="hero-title relative max-w-[12ch] font-heading text-[clamp(2.25rem,8.2vw,7.1rem)] font-black uppercase leading-[0.86] tracking-[-0.04em] text-gray-900"
 	>
 		{#if heroTitleReactionKey > 0}
 			{#key heroTitleReactionKey}
@@ -173,10 +173,14 @@
 		href="#"
 		aria-label="RSVP for Catalyst"
 		onclick={spawnParticles}
-		class="micro-interactive relative mt-5 inline-flex items-center rounded-full bg-dodger px-9 py-3.5 text-base font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-dodger/90 hover:shadow-md active:translate-y-0"
+		class="micro-interactive relative mt-6 inline-flex items-center rounded-full bg-dodger px-10 py-4 text-[1.04rem] font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-dodger/90 hover:shadow-md active:translate-y-0"
 	>
 		RSVP
 	</a>
+	<p in:fade={{ duration: 520, delay: 440 }} class="hero-meta pointer-events-none mt-7 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-gray-500 md:mt-8">
+		Summer 2026<br />
+		Hack Club YSWS
+	</p>
 	<div
 		in:fade={{ duration: 520, delay: 440 }}
 		class="absolute bottom-12 left-1/2 -translate-x-1/2 text-xs uppercase tracking-[0.18em] text-gray-400 md:bottom-16"
@@ -186,7 +190,6 @@
 
 <style>
 	.hero-grid {
-		/* Prefer dynamic viewport on modern browsers; svh class remains as fallback. */
 		min-height: calc(100dvh - var(--nav-height));
 	}
 
@@ -200,7 +203,7 @@
 			linear-gradient(to bottom, rgba(30, 144, 255, 0.085) 1px, transparent 1px);
 		background-size: 60px 60px;
 		background-position: calc(50% + var(--grid-ox, 0px)) calc(50% + var(--grid-oy, 0px));
-		mask-image: radial-gradient(ellipse 80% 68% at 50% 42%, black 10%, transparent 68%);
+		mask-image: radial-gradient(ellipse 82% 70% at 50% 46%, black 10%, transparent 68%);
 		transition: background-position 320ms ease-out;
 	}
 
@@ -222,8 +225,8 @@
 	.hero-catalyst-triangle {
 		position: absolute;
 		left: 50%;
-		top: 46%;
-		width: clamp(14rem, 35vw, 26rem);
+		top: 50%;
+		width: clamp(13rem, 33vw, 24rem);
 		aspect-ratio: 1 / 0.87;
 		pointer-events: none;
 		transform: translate(-50%, -50%) scale(calc(1 + var(--triangle-energy, 0) * 0.04));
@@ -310,7 +313,6 @@
 		100% { opacity: 0; transform: translate(-50%, -50%) scale(var(--catalyst-scale, 1.08)); }
 	}
 
-	/* ── RSVP burst particles ── */
 	.particles-container {
 		position: fixed;
 		inset: 0;
@@ -321,21 +323,20 @@
 
 	.rsvp-particle {
 		position: absolute;
-		width: 5px;
-		height: 5px;
+		width: 6px;
+		height: 6px;
 		background: #1e90ff;
 		border-radius: 1px;
 		transform: translate(-50%, -50%);
-		animation: particle-burst 580ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+		animation: particle-burst 820ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
 	}
 
 	@keyframes particle-burst {
-		0% { opacity: 0.9; transform: translate(-50%, -50%) translate(0px, 0px) scale(1.3); }
+		0% { opacity: 0.95; transform: translate(-50%, -50%) translate(0px, 0px) scale(1.45); }
 		70% { opacity: 0.5; }
 		100% { opacity: 0; transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) scale(0.2); }
 	}
 
-	/* dark mode */
 	:global(html[data-theme='dark'] .hero-title-reaction__svg path) {
 		stroke: rgba(147, 197, 253, 0.1);
 	}

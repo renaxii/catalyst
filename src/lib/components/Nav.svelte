@@ -18,19 +18,18 @@
 	<a
 		href="#page-top"
 		aria-label="Back to hero section"
-		class="micro-interactive absolute left-2 top-1/2 z-10 inline-flex -translate-y-1/2 items-center gap-2 font-heading text-lg font-bold leading-none tracking-tight text-gray-900 no-underline hover:text-gray-900 sm:left-3 md:left-4"
+		class="micro-interactive absolute left-3 top-1/2 z-10 inline-flex -translate-y-1/2 items-center gap-2.5 font-heading text-[1.02rem] font-bold leading-none tracking-tight text-gray-900 no-underline hover:text-gray-900 sm:left-4 md:left-6"
 	>
 		<img src={favicon} alt="" class="h-5 w-5 rounded-[0.35rem] bg-white p-0.5 sm:h-6 sm:w-6" />
 		<span>Catalyst</span>
 	</a>
-	<div class="mx-auto flex h-(--nav-height) w-full max-w-5xl items-center justify-end px-4 sm:px-6">
-		<div class="hidden items-center gap-7 md:flex md:gap-9">
-			<ul class="hidden items-center gap-8 md:flex">
+	<div class="mx-auto flex h-(--nav-height) w-full max-w-5xl items-center justify-end px-4 sm:px-6 md:px-8">
+		<ul class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-7 md:flex lg:gap-9">
 				{#each [['#challenge', 'Challenge'], ['#process', 'Process'], ['#prizes', 'Prizes'], ['#faq', 'FAQ']] as [href, label]}
 					<li>
 						<a
 							{href}
-							class="micro-interactive group relative inline-block translate-y-0 text-sm font-medium text-gray-500 transition-all duration-200 hover:-translate-y-0.5 hover:text-dodger"
+							class="micro-interactive group relative inline-block translate-y-0 text-[0.78rem] font-semibold uppercase tracking-[0.12em] text-gray-500 transition-all duration-200 hover:-translate-y-0.5 hover:text-dodger"
 						>
 							{label}
 							<span
@@ -39,11 +38,12 @@
 						</a>
 					</li>
 				{/each}
-			</ul>
+		</ul>
+		<div class="hidden items-center md:flex md:pr-0.5">
 			<button
 				type="button"
 				onclick={toggleTheme}
-				class={`micro-interactive inline-flex h-8 w-20 items-center justify-center rounded-full border px-2.5 text-xs font-semibold uppercase tracking-wider transition-all duration-200 sm:w-[5.35rem] sm:px-3 ${
+				class={`micro-interactive inline-flex h-8 w-21 items-center justify-center rounded-full border px-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.12em] transition-all duration-200 sm:w-[5.4rem] sm:px-3 ${
 					isDark
 						? 'border-dodger/40 bg-dodger/15 text-dodger'
 						: 'border-gray-200 bg-white text-gray-600 hover:border-dodger/40 hover:text-dodger'
@@ -90,13 +90,13 @@
 		id="mobile-nav-menu"
 		class={`absolute inset-x-0 top-full border-t border-gray-200 bg-white shadow-lg transition-all duration-220 md:hidden ${mobileMenuOpen ? 'pointer-events-auto translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0'}`}
 	>
-		<ul class="space-y-1 px-4 py-3 sm:px-6">
+		<ul class="space-y-1 px-4 py-3 text-center sm:px-6">
 			{#each [['#challenge', 'Challenge'], ['#process', 'Process'], ['#prizes', 'Prizes'], ['#faq', 'FAQ']] as [href, label]}
 				<li>
 					<a
 						{href}
 						onclick={closeMobileMenu}
-						class="micro-interactive block rounded-md px-3 py-2.5 text-sm font-medium text-gray-600 transition-colors duration-200 hover:text-dodger"
+						class="micro-interactive block rounded-md px-3 py-2.5 text-sm font-semibold uppercase tracking-[0.08em] text-gray-600 transition-colors duration-200 hover:text-dodger"
 					>
 						{label}
 					</a>
