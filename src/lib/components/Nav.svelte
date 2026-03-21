@@ -20,7 +20,7 @@
 		aria-label="Back to hero section"
 		class="micro-interactive absolute left-2 top-1/2 z-10 inline-flex -translate-y-1/2 items-center gap-2 font-heading text-lg font-bold leading-none tracking-tight text-gray-900 no-underline hover:text-gray-900 sm:left-3 md:left-4"
 	>
-		<img src={favicon} alt="" class="h-5 w-5 rounded-[0.35rem] border border-dodger/30 bg-white p-0.5 sm:h-6 sm:w-6" />
+		<img src={favicon} alt="" class="h-5 w-5 rounded-[0.35rem] bg-white p-0.5 sm:h-6 sm:w-6" />
 		<span>Catalyst</span>
 	</a>
 	<div class="mx-auto flex h-(--nav-height) w-full max-w-5xl items-center justify-end px-4 sm:px-6">
